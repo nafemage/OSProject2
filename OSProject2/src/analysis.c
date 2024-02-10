@@ -18,6 +18,7 @@ int main(int argc, char **argv)
     if (argc < 3)
     {
         printf("%s <pcb file> <schedule algorithm> [quantum]\n", argv[0]);
+        printf("Try passing in ../pcb.bin as the file name");
         return EXIT_FAILURE;
     }
 
