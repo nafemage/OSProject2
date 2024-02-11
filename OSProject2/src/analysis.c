@@ -23,16 +23,15 @@ int main(int argc, char **argv)
     }
 
     dyn_array_t *a = load_process_control_blocks(argv[1]);
-    print_dyn_pcb_array(a);
+    print_dyn_pcb_array(a->array, a->size);
 
     return EXIT_SUCCESS;
 }
 
 // testing purposes only
-void print_dyn_pcb_array(dyn_array_t *a)
+void print_pcb_array(ProcessControlBlock_t *pcb_array, size_t count)
 {
-    ProcessControlBlock_t *pcb_array = (ProcessControlBlock_t *)(a->array);
-    for (size_t i = 0; i < a->size; i++)
+    for (size_t i = 0; i < count; i++)
     {
         ProcessControlBlock_t pcb = pcb_array[i];
         printf("PCB #%zu:\n", i);

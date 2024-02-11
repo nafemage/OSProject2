@@ -100,7 +100,9 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
 
 bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
 {
-    UNUSED(ready_queue);
-    UNUSED(result);
+    if (ready_queue == NULL || result == NULL)
+    {
+        return false;
+    }
     return false;
 }

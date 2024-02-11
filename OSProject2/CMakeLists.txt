@@ -23,11 +23,16 @@ add_library(process_scheduling src/process_scheduling.c)
 
 target_link_libraries(process_scheduling dyn_array)
 
+# Utilities library
+add_library(utilities src/utilities)
+
+target_link_libraries(utilities process_scheduling)
+
 # Compile the analysis executable.
 add_executable(${PROJECT_NAME}_analysis src/analysis.c)
 
 # link the dyn_array library we compiled against our analysis executable.
-target_link_libraries(${PROJECT_NAME}_analysis process_scheduling)
+target_link_libraries(${PROJECT_NAME}_analysis process_scheduling utilities)
 
 # Compile the the tester executable.
 add_executable(${PROJECT_NAME}_test test/tests.cpp)
@@ -35,4 +40,4 @@ add_executable(${PROJECT_NAME}_test test/tests.cpp)
 target_compile_definitions(${PROJECT_NAME}_test PRIVATE)
 
 # Link ${PROJECT_NAME}_test with dyn_array and gtest and pthread libraries
-target_link_libraries(${PROJECT_NAME}_test gtest pthread dyn_array)
+target_link_libraries(${PROJECT_NAME}_test gtest pthread dyn_array process_scheduling utilities)
