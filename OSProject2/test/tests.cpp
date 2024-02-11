@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include "../include/processing_scheduling.h"
 
+#include "utilities.h"
+
 // Using a C library requires extern "C" to prevent function managling
 extern "C"
 {
@@ -22,8 +24,13 @@ TEST(shortest_remaining_time_first, NullQueue)
 
 TEST(shortest_remaining_time_first, NullScheduleResult)
 {
-    // dyn_array_t *dyn_array = (dyn_array_t *)malloc(sizeof(dyn_array_t));
-    // dyn_array->array = (ProcessControlBlock_t *)malloc(sizeof(ProcessControlBlock_t));
+    uint32_t arrivals[] = {25, 30, 23};
+    uint32_t priorities[] = {0, 1, 2};
+    uint32_t remaining_burst_times[] = {100, 100, 100};
+    bool started[] = {false, false, false};
+    int count = 3;
+    dyn_array_t *array = create_dyn_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
+    print_pcb_array((ProcessControlBlock_t *)array->array, count);
     EXPECT_EQ(false, shortest_remaining_time_first(NULL, NULL));
 }
 
