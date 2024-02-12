@@ -3,7 +3,6 @@
 
 #include "dyn_array.h"
 #include "processing_scheduling.h"
-#include "dyn_array.h"
 
 void print_pcb_array(ProcessControlBlock_t *pcb_array, size_t count)
 {
@@ -47,4 +46,44 @@ dyn_array_t *create_dyn_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint
     dyn_array_t *dyn_array = dyn_array_import(pcb_array, count, sizeof(ProcessControlBlock_t), NULL);
     free(pcb_array);
     return dyn_array;
+}
+
+bool write_dyn_array_to_file(dyn_array_t *array, char *filename)
+{
+    if (array == NULL || filename == NULL)
+    {
+        return false;
+    }
+    FILE *file = fopen(filename, "w");
+    if (!file)
+    {
+        return false;
+    }
+    size_t elements_written;
+    elements_written = (&(array->size), sizeof(uint32_t), 1, file);
+    if (elements_written != 1)
+    {
+        return false;
+    }
+    for (size_t i = 0; i < array->size; i++)
+    {
+        ProcessControlBlock_t pcb = ((ProcessControlBlock_t *)(array->array))[i];
+        elements_written = fwrite(&pcb.remaining_burst_time, sizeof(uint32_t), 1, file);
+        if (elements_written != 1)
+        {
+            return false;
+        }
+        elements_written = fwrite(&pcb.priority, sizeof(uint32_t), 1, file);
+        if (elements_written != 1)
+        {
+            return false;
+        }
+        elements_written = fwrite(&pcb.arrival, sizeof(uint32_t), 1, file);
+        if (elements_written != 1)
+        {
+            return false;
+        }
+    }
+    fclose(filename);
+    return true;
 }

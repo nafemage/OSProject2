@@ -98,11 +98,36 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
     return dyn_array;
 }
 
+int srtf_sort_compare(const void *a, const void *b);
+
+int srtf_sort_compare(const void *a, const void *b)
+{
+    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a;
+    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b;
+    if (pcb_a->arrival < pcb_b->arrival)
+    {
+        return -1; // a comes before b
+    }
+    else if (pcb_a->arrival > pcb_b->arrival)
+    {
+        return 1; // b comes before a
+    }
+    return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time;
+}
+
 bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
 {
     if (ready_queue == NULL || result == NULL)
     {
         return false;
     }
+    int (*ptr)(const void *, const void *);
+    ptr = srtf_sort_compare;
+
+    dyn_array_sort(ready_queue, ptr);
+    // sort array by arrival time (if equal then by burst time)
+    // send to cpu, increment clock, decrement burst time
+    // check queue at a certain index, if the process at the index is now available then sort again after incrementing index to next waiting process (and setting arrival times to 0)
+
     return false;
 }

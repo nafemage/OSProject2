@@ -16,6 +16,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wshadow -Werror")
 # THIS IS REQUIRED
 include_directories(./include)
 
+
 # Create library from dyn_array so we can use it later.
 add_library(dyn_array src/dyn_array.c)
 
@@ -41,3 +42,10 @@ target_compile_definitions(${PROJECT_NAME}_test PRIVATE)
 
 # Link ${PROJECT_NAME}_test with dyn_array and gtest and pthread libraries
 target_link_libraries(${PROJECT_NAME}_test gtest pthread dyn_array process_scheduling utilities)
+
+# Writing dyn_array to file dependencies
+add_library(write_dyn_file pcb_file_tests/write_dyn_file)
+
+target_link_libraries(write_dyn_file dyn_array)
+
+add_executable(${PROJECT_NAME}_write_dyn_file pcb_file_tests/write_dyn_file.c)

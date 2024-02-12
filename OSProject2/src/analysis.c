@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     }
 
     dyn_array_t *a = load_process_control_blocks(argv[1]);
-    print_dyn_pcb_array(a->array, a->size);
+    dyn_array_destroy(a);
 
     return EXIT_SUCCESS;
 }
