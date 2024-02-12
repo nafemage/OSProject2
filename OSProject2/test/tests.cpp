@@ -37,6 +37,12 @@ TEST(load_process_control_blocks, BadExistingFilename)
     EXPECT_EQ(nullptr, load_process_control_blocks("../pcb-bad-1.bin"));
 }
 
+TEST(load_process_control_blocks, BadFile)
+{
+    dyn_array_t *array = load_process_control_blocks("../pcb_file_test/files/fail-count-only.bin");
+    EXPECT_EQ(nullptr, array);
+}
+
 TEST(load_process_control_blocks, GoodExistingFilename)
 {
     dyn_array_t *array = load_process_control_blocks("../pcb.bin");

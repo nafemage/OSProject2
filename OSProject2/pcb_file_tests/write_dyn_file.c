@@ -52,7 +52,10 @@ int main(int argc, char **argv)
         printf("%s <file_destination> <count> <pcb_1_burst_time> <pcb_1_priority> <pcb_1_arrival> <...>\n", argv[0]);
         return EXIT_FAILURE;
     }
-    FILE *file = fopen(argv[1], "w");
+    char path[50] = "../pcb_file_tests/files/";
+    char *file_path = strcat(path, argv[1]);
+
+    FILE *file = fopen(file_path, "w");
     if (!file)
     {
         printf("Open fail: %s\n", argv[1]);
