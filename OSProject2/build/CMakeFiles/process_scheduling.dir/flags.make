@@ -6,5 +6,5 @@ C_FLAGS = -std=c11 -Wall -Wextra -Wshadow -Werror
 
 C_DEFINES = 
 
-C_INCLUDES = -I/homes/mschwinn/OSProject2/./include 
+C_INCLUDES = -I/homes/mschwinn/OSProject2/OSProject2/./include 
 

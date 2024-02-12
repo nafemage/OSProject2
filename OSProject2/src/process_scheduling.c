@@ -12,11 +12,10 @@
 
 int compare_remaining_burst_time(const void *a, const void *b);
 
-// private function
-void virtual_cpu(ProcessControlBlock_t *process_control_block)
-{
-    // decrement the burst time of the pcb
-    --process_control_block->remaining_burst_time;
+// Private function for decreasing the execution time of a process
+void virtual_cpu(ProcessControlBlock_t *process_control_block, uint32_t execution_time){
+    // Decrement burst time of the PCB
+    process_control_block->remaining_burst_time=process_control_block->remaining_burst_time-execution_time;
 }
 
 bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result)
@@ -41,14 +40,17 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result) {
     for (size_t i = 0; i < num_processes; ++i) {
         ProcessControlBlock_t *current_process = dyn_array_at(ready_queue, i);
 
-        // Call virtual_cpu to decrement the burst time
-        virtual_cpu(current_process);
-
-        // Calculate waiting time for the scheduled process
+        // Calculate times for the scheduled process
         float waiting_time = result->total_run_time - current_process->arrival;
+        float burst_time = current_process->remaining_burst_time;
+
+        // Call virtual_cpu to decrement the burst time
+        virtual_cpu(current_process, burst_time);
+        current_process->started = true;
+        current_process->completed = true;
 
         // Update the schedule result
-        result->total_run_time += 1;
+        result->total_run_time += burst_time;
         result->average_waiting_time =
             (result->average_waiting_time * i + waiting_time) / (i + 1);
         result->average_turnaround_time =
@@ -58,7 +60,6 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result) {
 
     // Remove the scheduled process from the ready_queue
     dyn_array_erase(ready_queue, 0);
-
     return true;
 }
 
@@ -71,10 +72,49 @@ bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result)
 
 bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quantum)
 {
-    UNUSED(ready_queue);
-    UNUSED(result);
-    UNUSED(quantum);
-    return false;
+    // Invalid parameters
+    if (ready_queue == NULL || result == NULL || quantum <= 0) return false;
+
+    // No processes
+    size_t num_processes = dyn_array_size(ready_queue);
+    if (num_processes == 0) return false;
+
+    // Iterate through the processes
+    for (size_t i = 0; i < num_processes; ++i) {
+        ProcessControlBlock_t *current_process = dyn_array_at(ready_queue, i);
+
+        // Check to see if the PCB has been completed
+        if (current_process->completed != true) {
+            // Calculate times for the scheduled process
+            float waiting_time = result->total_run_time - current_process->arrival;
+            float burst_time = current_process->remaining_burst_time;
+
+            // Execute process in its entirety, or up to the burst time
+            if (quantum <= burst_time) {
+                // Call virtual_cpu to decrement the burst time
+                virtual_cpu(current_process, burst_time);
+                result->total_run_time += burst_time;
+                current_process->completed = true;
+            } else {
+                // Call virtual_cpu to decrement the burst time, to the quantum
+                virtual_cpu(current_process, quantum);
+                result->total_run_time += quantum;
+            }
+            current_process->started = true;
+
+
+            // Update the schedule result
+            result->average_waiting_time =
+                (result->average_waiting_time * i + waiting_time) / (i + 1);
+            result->average_turnaround_time =
+                (result->average_turnaround_time * i +
+                result->total_run_time - current_process->arrival) / (i + 1);
+            }
+    }
+
+    // Remove the scheduled process from the ready_queue
+    dyn_array_erase(ready_queue, 0);
+    return true;
 }
 
 dyn_array_t *load_process_control_blocks(const char *input_file)

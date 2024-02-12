@@ -18,7 +18,7 @@ string.h
 stdint.h
 -
 
-/homes/mschwinn/OSProject2/src/dyn_array.c
+/homes/mschwinn/OSProject2/OSProject2/src/dyn_array.c
 dyn_array.h
-/homes/mschwinn/OSProject2/src/dyn_array.h
+/homes/mschwinn/OSProject2/OSProject2/src/dyn_array.h
 
