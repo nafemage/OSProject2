@@ -82,6 +82,7 @@ TEST(shortest_remaining_time_first, SuccessfulRun)
     dyn_array_t *array = create_dyn_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
     ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
     EXPECT_EQ(true, shortest_remaining_time_first(array, sr));
+    EXPECT_EQ(0, array->size);
     print_pcb_array((ProcessControlBlock_t *)(array->array), array->size);
     free(sr);
     dyn_array_destroy(array);

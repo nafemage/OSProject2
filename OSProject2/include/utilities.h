@@ -20,8 +20,6 @@ extern "C"
 
     dyn_array_t *create_dyn_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint32_t *remaining_burst_times, bool *started, int count);
 
-    bool write_dyn_array_to_file(dyn_array_t *array, char *filename);
-
 #ifdef __cplusplus
 }
 #endif

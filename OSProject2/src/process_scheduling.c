@@ -5,6 +5,7 @@
 
 #include "dyn_array.h"
 #include "processing_scheduling.h"
+#include "utilities.h"
 
 // You might find this handy.  I put it around unused parameters, but you should
 // remove it before you submit. Just allows things to compile initially.
@@ -115,19 +116,62 @@ int srtf_sort_compare(const void *a, const void *b)
     return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time;
 }
 
+void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes, uint32_t *current_wait_time, int (*cmp_fn)(const void *, const void *));
+
+void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes, uint32_t *current_wait_time, int (*cmp_fn)(const void *, const void *))
+{
+    if (ready_queue->size == 0)
+    {
+        return;
+    }
+    ProcessControlBlock_t *pcb = ((ProcessControlBlock_t *)dyn_array_at(ready_queue, 0));
+    if (current_processes->size == 0)
+    {
+        *current_wait_time = pcb->arrival;
+    }
+    while (ready_queue->size > 0)
+    {
+        pcb = ((ProcessControlBlock_t *)dyn_array_at(ready_queue, 0));
+        if (pcb->arrival == *current_wait_time)
+        {
+            pcb->arrival = 0;
+            const void *const_pcb = dyn_array_at(ready_queue, 0);
+            dyn_array_pop_front(ready_queue);
+            dyn_array_insert_sorted(current_processes, const_pcb, cmp_fn);
+        }
+        else
+        {
+            return;
+        }
+    }
+}
+
 bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
 {
     if (ready_queue == NULL || result == NULL)
     {
         return false;
     }
-    int (*ptr)(const void *, const void *);
-    ptr = srtf_sort_compare;
+    int (*cmp_fn)(const void *, const void *) = srtf_sort_compare;
 
-    dyn_array_sort(ready_queue, ptr);
-    // sort array by arrival time (if equal then by burst time)
-    // send to cpu, increment clock, decrement burst time
-    // check queue at a certain index, if the process at the index is now available then sort again after incrementing index to next waiting process (and setting arrival times to 0)
+    dyn_array_sort(ready_queue, cmp_fn); // sort array by arrival time (if equal then by burst time)
 
-    return false;
+    dyn_array_t *current_processes = dyn_array_create(ready_queue->capacity, sizeof(ProcessControlBlock_t), NULL);
+    uint32_t current_wait_time;
+
+    enqueue_processes(ready_queue, current_processes, &current_wait_time, cmp_fn);
+
+    while (current_processes->size)
+    {
+        ProcessControlBlock_t *pcb = ((ProcessControlBlock_t *)dyn_array_front(current_processes));
+        current_wait_time++; // increment clock
+        virtual_cpu(pcb);    // send to cpu, decrement burst time
+        if (pcb->remaining_burst_time == 0)
+        {
+            dyn_array_pop_front(current_processes);
+        }
+        enqueue_processes(ready_queue, current_processes, &current_wait_time, cmp_fn); // check queue, if the process at the start is now available then sort again after popping to next waiting process (and setting arrival times to 0)
+    }
+
+    return true;
 }
