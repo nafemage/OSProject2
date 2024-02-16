@@ -13,7 +13,7 @@
 int compare_remaining_burst_time(const void *a, const void *b);
 
 // Private function for decreasing the execution time of a process
-void virtual_cpu(ProcessControlBlock_t *process_control_block, uint32_t execution_time){
+void virtual_cpu(ProcessControlBlock_t *process_control_block, uint32_t execution_time) {
     // Decrement burst time of the PCB
     process_control_block->remaining_burst_time=process_control_block->remaining_burst_time-execution_time;
 }
@@ -36,32 +36,51 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result) {
     // Sort the queue based on remaining burst time
     dyn_array_sort(ready_queue, compare_remaining_burst_time);
 
-    // Iterate through the processes
-    for (size_t i = 0; i < num_processes; ++i) {
-        ProcessControlBlock_t *current_process = dyn_array_at(ready_queue, i);
+    // Initialize variables for accumulation and calculation
+    unsigned int process_count = num_processes;
+    float total_waiting_time = 0.0;
+    float total_turnaround_time = 0.0;
+    float execution_time = 0.0;
 
-        // Calculate times for the scheduled process
-        float waiting_time = result->total_run_time - current_process->arrival;
-        float burst_time = current_process->remaining_burst_time;
+    // Iterate through the processes using a while loop
+    size_t i = 0;
+    while (num_processes > 0) {
+        while (i < num_processes) {
+            ProcessControlBlock_t *current_process = dyn_array_at(ready_queue, i);
 
-        // Call virtual_cpu to decrement the burst time
-        virtual_cpu(current_process, burst_time);
-        current_process->started = true;
-        current_process->completed = true;
+            // Check if the process has arrived based on arrival time
+            if (current_process->arrival <= execution_time) {
+                // Calculate times for the scheduled process
+                float waiting_time = execution_time - current_process->arrival;
+                float burst_time = current_process->remaining_burst_time;
 
-        // Update the schedule result
-        result->total_run_time += burst_time;
-        result->average_waiting_time =
-            (result->average_waiting_time * i + waiting_time) / (i + 1);
-        result->average_turnaround_time =
-            (result->average_turnaround_time * i +
-             result->total_run_time - current_process->arrival) / (i + 1);
+                // Call virtual_cpu to decrement the burst time
+                virtual_cpu(current_process, burst_time);
+                current_process->started = true;
+                current_process->completed = true;
+
+                // Update the schedule result
+                total_waiting_time += waiting_time;
+                total_turnaround_time += execution_time - current_process->arrival;
+                execution_time += burst_time;
+
+                // Remove the scheduled process from the ready_queue
+                dyn_array_erase(ready_queue, i);
+                num_processes--; // Decrement the number of processes after removal
+            } else { // If the process hasn't arrived yet, move to the next process
+                i++;
+            }
+        }
     }
 
-    // Remove the scheduled process from the ready_queue
-    dyn_array_erase(ready_queue, 0);
+    // Update the average waiting and turnaround times
+    result->average_waiting_time = total_waiting_time / process_count;
+    result->average_turnaround_time = total_turnaround_time / process_count;
+    result->total_run_time = execution_time;
+
     return true;
 }
+
 
 bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result)
 {
