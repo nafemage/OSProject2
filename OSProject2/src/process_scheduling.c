@@ -99,9 +99,9 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
     return dyn_array;
 }
 
-int srtf_sort_compare(const void *a, const void *b);
+int srtf_sort_arrival(const void *a, const void *b);
 
-int srtf_sort_compare(const void *a, const void *b)
+int srtf_sort_arrival(const void *a, const void *b)
 {
     const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a;
     const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b;
@@ -116,6 +116,15 @@ int srtf_sort_compare(const void *a, const void *b)
     return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time;
 }
 
+int srtf_sort_compare_burst(const void *a, const void *b);
+
+int srtf_sort_compare_burst(const void *a, const void *b)
+{
+    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a;
+    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b;
+    return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time;
+}
+
 void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes, uint32_t *current_wait_time, int (*cmp_fn)(const void *, const void *));
 
 void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes, uint32_t *current_wait_time, int (*cmp_fn)(const void *, const void *))
@@ -124,20 +133,23 @@ void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes,
     {
         return;
     }
-    ProcessControlBlock_t *pcb = ((ProcessControlBlock_t *)dyn_array_at(ready_queue, 0));
+    const ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_front(ready_queue);
+
     if (current_processes->size == 0)
     {
         *current_wait_time = pcb->arrival;
     }
     while (ready_queue->size > 0)
     {
-        pcb = ((ProcessControlBlock_t *)dyn_array_at(ready_queue, 0));
+        // Note: storing dyn_array_front and following it by dyn_array_pop_front will change the value referenced by the dyn_array_front variable
+        pcb = (ProcessControlBlock_t *)dyn_array_front(ready_queue);
         if (pcb->arrival == *current_wait_time)
         {
-            pcb->arrival = 0;
-            const void *const_pcb = dyn_array_at(ready_queue, 0);
+            const ProcessControlBlock_t *pcb_cpy = create_pcb(pcb->arrival, pcb->priority, pcb->remaining_burst_time, pcb->started, NULL);
+            // printf("Enqueue 2: %u\n", pcb->arrival);
             dyn_array_pop_front(ready_queue);
-            dyn_array_insert_sorted(current_processes, const_pcb, cmp_fn);
+            // printf("Enqueue 3: %u\n", pcb->arrival);
+            dyn_array_insert_sorted(current_processes, pcb_cpy, cmp_fn);
         }
         else
         {
@@ -152,26 +164,39 @@ bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *r
     {
         return false;
     }
-    int (*cmp_fn)(const void *, const void *) = srtf_sort_compare;
+    uint32_t process_count = ready_queue->size;
+    float total_turnaround_time = 0;
+    float total_wait_time = 0;
 
-    dyn_array_sort(ready_queue, cmp_fn); // sort array by arrival time (if equal then by burst time)
+    dyn_array_sort(ready_queue, srtf_sort_arrival); // sort array by arrival time (if equal then by burst time)
 
     dyn_array_t *current_processes = dyn_array_create(ready_queue->capacity, sizeof(ProcessControlBlock_t), NULL);
     uint32_t current_wait_time;
 
-    enqueue_processes(ready_queue, current_processes, &current_wait_time, cmp_fn);
+    enqueue_processes(ready_queue, current_processes, &current_wait_time, srtf_sort_compare_burst);
 
     while (current_processes->size)
     {
         ProcessControlBlock_t *pcb = ((ProcessControlBlock_t *)dyn_array_front(current_processes));
+        if (!pcb->started)
+        {
+            pcb->started = true;
+        }
+
         current_wait_time++; // increment clock
         virtual_cpu(pcb);    // send to cpu, decrement burst time
         if (pcb->remaining_burst_time == 0)
         {
+            float turnaround_time = current_wait_time - pcb->arrival;
+            total_turnaround_time += turnaround_time;
+            total_wait_time += turnaround_time - pcb->total_burst_time;
             dyn_array_pop_front(current_processes);
         }
-        enqueue_processes(ready_queue, current_processes, &current_wait_time, cmp_fn); // check queue, if the process at the start is now available then sort again after popping to next waiting process (and setting arrival times to 0)
+        enqueue_processes(ready_queue, current_processes, &current_wait_time, srtf_sort_compare_burst); // check queue, if the process at the start is now available then sort again after popping to next waiting process (and setting arrival times to 0)
     }
+    result->average_turnaround_time = total_turnaround_time / process_count;
+    result->average_waiting_time = total_wait_time / process_count;
+    result->total_run_time = current_wait_time;
 
     return true;
 }

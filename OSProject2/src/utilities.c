@@ -27,6 +27,7 @@ ProcessControlBlock_t *create_pcb(uint32_t arrival, uint32_t priority, uint32_t 
     ptr->priority = priority;
     ptr->remaining_burst_time = remaining_burst_time;
     ptr->started = started;
+    ptr->total_burst_time = remaining_burst_time;
     return ptr;
 }
 
@@ -46,4 +47,11 @@ dyn_array_t *create_dyn_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint
     dyn_array_t *dyn_array = dyn_array_import(pcb_array, count, sizeof(ProcessControlBlock_t), NULL);
     free(pcb_array);
     return dyn_array;
+}
+
+void print_schedule_result(ScheduleResult_t *result)
+{
+    printf("Average waiting time: %f\n", result->average_waiting_time);
+    printf("Average turnaround time: %f\n", result->average_turnaround_time);
+    printf("Run time: %lu\n", result->total_run_time);
 }

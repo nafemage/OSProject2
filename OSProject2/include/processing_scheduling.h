@@ -2,7 +2,7 @@
 #define PROCESS_SCHEDULING_H
 
 #ifdef __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
 
@@ -11,22 +11,21 @@ extern "C"
 
 #include "dyn_array.h"
 
-    typedef struct 
+    typedef struct
     {
-        uint32_t remaining_burst_time;  // the remaining burst of the pcb
-        uint32_t priority;				// The priority of the task
-        uint32_t arrival;				// Time the process arrived in the ready queue
-        bool started;              	    // If it has been activated on virtual CPU
-    } 
-    ProcessControlBlock_t;		        // you may or may not need to add more elements
+        uint32_t total_burst_time;     // I added this field for waiting time calculation
+        uint32_t remaining_burst_time; // the remaining burst of the pcb
+        uint32_t priority;             // The priority of the task
+        uint32_t arrival;              // Time the process arrived in the ready queue
+        bool started;                  // If it has been activated on virtual CPU
+    } ProcessControlBlock_t;           // you may or may not need to add more elements
 
-    typedef struct 
+    typedef struct
     {
-        float average_waiting_time;     // the average waiting time in the ready queue until first schedue on the cpu
-        float average_turnaround_time;  // the average completion time of the PCBs
-        unsigned long total_run_time;   // the total time to process all the PCBs in the ready queue
-    } 
-    ScheduleResult_t;
+        float average_waiting_time;    // the average waiting time in the ready queue until first schedue on the cpu
+        float average_turnaround_time; // the average completion time of the PCBs
+        unsigned long total_run_time;  // the total time to process all the PCBs in the ready queue
+    } ScheduleResult_t;
 
     // Reads the PCB burst time values from the binary file into ProcessControlBlock_t remaining_burst_time field
     // for N number of PCB burst time stored in the file.

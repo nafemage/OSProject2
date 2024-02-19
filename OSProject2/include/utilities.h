@@ -20,6 +20,8 @@ extern "C"
 
     dyn_array_t *create_dyn_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint32_t *remaining_burst_times, bool *started, int count);
 
+    void print_schedule_result(ScheduleResult_t *result);
+
 #ifdef __cplusplus
 }
 #endif

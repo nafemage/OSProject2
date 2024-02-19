@@ -74,16 +74,16 @@ TEST(shortest_remaining_time_first, NullScheduleResult)
 
 TEST(shortest_remaining_time_first, SuccessfulRun)
 {
-    uint32_t arrivals[] = {25, 30, 25};
+    uint32_t arrivals[] = {30, 25, 24};
     uint32_t priorities[] = {0, 1, 2};
-    uint32_t remaining_burst_times[] = {100, 100, 5};
+    uint32_t remaining_burst_times[] = {100, 106, 5};
     bool started[] = {false, false, false};
     int count = 3;
     dyn_array_t *array = create_dyn_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
     ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
     EXPECT_EQ(true, shortest_remaining_time_first(array, sr));
-    EXPECT_EQ(0, array->size);
-    print_pcb_array((ProcessControlBlock_t *)(array->array), array->size);
+    EXPECT_EQ((uint32_t)0, array->size);
+    print_schedule_result(sr);
     free(sr);
     dyn_array_destroy(array);
 }
