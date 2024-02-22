@@ -33,6 +33,10 @@ ProcessControlBlock_t *create_pcb(uint32_t arrival, uint32_t priority, uint32_t 
 
 ProcessControlBlock_t *create_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint32_t *remaining_burst_times, bool *started, int count)
 {
+    if (arrivals == NULL || priorities == NULL || remaining_burst_times == NULL || started == NULL)
+    {
+        return NULL;
+    }
     ProcessControlBlock_t *pcb_array = (ProcessControlBlock_t *)malloc(sizeof(ProcessControlBlock_t) * count);
     for (int i = 0; i < count; i++)
     {

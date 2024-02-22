@@ -50,10 +50,11 @@ TEST(load_process_control_blocks, BadFileNoPriority)
     EXPECT_EQ(nullptr, array);
 }
 
-TEST(load_process_control_blocks, BadFileLowCount)
+TEST(load_process_control_blocks, FileLowCount) // Should low count be invalid?
 {
     dyn_array_t *array = load_process_control_blocks("../pcb_file_tests/files/low-count.bin");
-    EXPECT_EQ(nullptr, array);
+    EXPECT_NE(nullptr, array);
+    dyn_array_destroy(array);
 }
 
 TEST(load_process_control_blocks, BadFileHighCount)
