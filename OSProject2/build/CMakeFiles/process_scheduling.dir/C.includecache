@@ -26,10 +26,14 @@ stdint.h
 dyn_array.h
 ../include/dyn_array.h
 
-/homes/mschwinn/OSProject2/OSProject2/src/analysis.c
+/homes/mschwinn/OSProject2/OSProject2/src/process_scheduling.c
+fcntl.h
+-
 stdio.h
 -
-stdlib.h
+string.h
+-
+unistd.h
 -
 dyn_array.h
 /homes/mschwinn/OSProject2/OSProject2/src/dyn_array.h
