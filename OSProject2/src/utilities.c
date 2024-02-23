@@ -4,6 +4,7 @@
 #include "dyn_array.h"
 #include "processing_scheduling.h"
 
+/*Start of test helpers*/
 void print_pcb_array(ProcessControlBlock_t *pcb_array, size_t count)
 {
     for (size_t i = 0; i < count; i++)
@@ -60,6 +61,9 @@ void print_schedule_result(ScheduleResult_t *result)
     printf("Average turnaround time: %f\n", result->average_turnaround_time);
     printf("Run time: %lu\n", result->total_run_time);
 }
+/*End of test helpers*/
+
+/*Start of analysis helpers*/
 
 #define FCFS "FCFS"
 #define P "P"
@@ -105,3 +109,50 @@ void print_valid_algorithms()
     printf("Round robin: \'%s\' OR \'round_robin\'.\n", RR);
     printf("Shortest remaining time first: \'%s\' OR \'shortest_remaining_time_first\'.\n", SRTF);
 }
+/*End of analysis helpers*/
+
+/*Start of process_scheduling helpers*/
+void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes, uint32_t *current_wait_time, int (*cmp_fn)(const void *, const void *))
+{
+    if (ready_queue->size == 0)
+    {
+        return; // Return if ready_queue size is 0 (all processes have arrived)
+    }
+    const ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_front(ready_queue); // Get the first element in the ready_queue (the one with the smallest arrival time)
+
+    if (current_processes->size == 0) // If no pcbs are in the current_processes queue
+    {
+        *current_wait_time = pcb->arrival; // Set the current_wait_time to the pcb's arrival ("fast forward")
+    }
+    while (ready_queue->size > 0 && pcb->arrival == *current_wait_time) // While pcbs are in the ready_queue and the pcb at the front of the queue has the same arrival time as the wait time
+    {
+        pcb = (ProcessControlBlock_t *)dyn_array_front(ready_queue); // Get the pcb at the front of the ready_queue
+        // Note: storing dyn_array_front and following it by dyn_array_pop_front will change the value referenced by the dyn_array_front variable (this is why a create a new pcb with the same values)
+        const ProcessControlBlock_t *pcb_cpy = create_pcb(pcb->arrival, pcb->priority, pcb->remaining_burst_time, pcb->started, NULL); // Copy the pcb at the front of the ready_queue
+        dyn_array_pop_front(ready_queue);                                                                                              // Remove the pcb from the ready_queue
+        dyn_array_insert_sorted(current_processes, pcb_cpy, cmp_fn);                                                                   // Insert the pcb into the current_processes queue (this will insert based on burst time)
+    }
+}
+
+int compare_burst(const void *a, const void *b)
+{
+    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a; // Cast the "a" variable to a pcb
+    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b; // Cast the "b" variable to a pcb
+    return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time;      // The pcb with the shortest burst time should be processed before the other
+}
+
+int compare_arrival(const void *a, const void *b)
+{
+    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a; // Cast the "a" variable to a pcb
+    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b; // Cast the "b" variable to a pcb
+    if (pcb_a->arrival < pcb_b->arrival)
+    {
+        return -1; // pcb_a should be processed before pcb_b
+    }
+    else if (pcb_a->arrival > pcb_b->arrival)
+    {
+        return 1; // pcb_b should be processed before pcb_a
+    }
+    return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time; // The pcb with the shortest burst time should be processed before the other
+}
+/*End of process_scheduling helpers*/

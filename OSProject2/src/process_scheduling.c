@@ -11,8 +11,6 @@
 // remove it before you submit. Just allows things to compile initially.
 #define UNUSED(x) (void)(x)
 
-int compare_remaining_burst_time(const void *a, const void *b);
-
 // Private function for decreasing the execution time of a process
 void virtual_cpu(ProcessControlBlock_t *process_control_block, uint32_t execution_time)
 {
@@ -34,7 +32,7 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
         return false;
 
     // Sort the ready queue based on remaining burst time (shortest job first)
-    dyn_array_sort(ready_queue, compare_remaining_burst_time);
+    dyn_array_sort(ready_queue, compare_burst);
 
     // Initialize variables for tracking statistics
     float total_waiting_time = 0.0;
@@ -299,58 +297,6 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
     return dyn_array;                                                                                     // Return the dyn_array
 }
 
-// Sorts a and b by arrival time. If arrival time is equal then by burst time
-int srtf_sort_arrival(const void *a, const void *b);
-
-int srtf_sort_arrival(const void *a, const void *b)
-{
-    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a; // Cast the "a" variable to a pcb
-    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b; // Cast the "b" variable to a pcb
-    if (pcb_a->arrival < pcb_b->arrival)
-    {
-        return -1; // pcb_a should be processed before pcb_b
-    }
-    else if (pcb_a->arrival > pcb_b->arrival)
-    {
-        return 1; // pcb_b should be processed before pcb_a
-    }
-    return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time; // The pcb with the shortest burst time should be processed before the other
-}
-
-// Sorts a and b by burst time
-int srtf_sort_burst(const void *a, const void *b);
-
-int srtf_sort_burst(const void *a, const void *b)
-{
-    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a; // Cast the "a" variable to a pcb
-    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b; // Cast the "b" variable to a pcb
-    return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time;      // The pcb with the shortest burst time should be processed before the other
-}
-
-void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes, uint32_t *current_wait_time, int (*cmp_fn)(const void *, const void *));
-
-void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes, uint32_t *current_wait_time, int (*cmp_fn)(const void *, const void *))
-{
-    if (ready_queue->size == 0)
-    {
-        return; // Return if ready_queue size is 0 (all processes have arrived)
-    }
-    const ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_front(ready_queue); // Get the first element in the ready_queue (the one with the smallest arrival time)
-
-    if (current_processes->size == 0) // If no pcbs are in the current_processes queue
-    {
-        *current_wait_time = pcb->arrival; // Set the current_wait_time to the pcb's arrival ("fast forward")
-    }
-    while (ready_queue->size > 0 && pcb->arrival == *current_wait_time) // While pcbs are in the ready_queue and the pcb at the front of the queue has the same arrival time as the wait time
-    {
-        pcb = (ProcessControlBlock_t *)dyn_array_front(ready_queue); // Get the pcb at the front of the ready_queue
-        // Note: storing dyn_array_front and following it by dyn_array_pop_front will change the value referenced by the dyn_array_front variable (this is why a create a new pcb with the same values)
-        const ProcessControlBlock_t *pcb_cpy = create_pcb(pcb->arrival, pcb->priority, pcb->remaining_burst_time, pcb->started, NULL); // Copy the pcb at the front of the ready_queue
-        dyn_array_pop_front(ready_queue);                                                                                              // Remove the pcb from the ready_queue
-        dyn_array_insert_sorted(current_processes, pcb_cpy, cmp_fn);                                                                   // Insert the pcb into the current_processes queue (this will insert based on burst time)
-    }
-}
-
 bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
 {
     if (ready_queue == NULL || result == NULL)
@@ -361,12 +307,12 @@ bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *r
     float total_turnaround_time = 0;            // The sum of all turnaround times
     float total_wait_time = 0;                  // The sum of all wait times
 
-    dyn_array_sort(ready_queue, srtf_sort_arrival); // sort array by arrival time (if equal then by burst time)
+    dyn_array_sort(ready_queue, compare_arrival); // sort array by arrival time (if equal then by burst time)
 
     dyn_array_t *current_processes = dyn_array_create(ready_queue->capacity, sizeof(ProcessControlBlock_t), NULL); // dyn_array fors holding the processes that have arrived
     uint32_t current_wait_time;                                                                                    // The time that has elapsed
 
-    enqueue_processes(ready_queue, current_processes, &current_wait_time, srtf_sort_burst); // Add processes to the current_processes queue that have arrived and sort them by burst time
+    enqueue_processes(ready_queue, current_processes, &current_wait_time, compare_burst); // Add processes to the current_processes queue that have arrived and sort them by burst time
 
     while (current_processes->size) // While there are processes in the current_processes queue
     {
@@ -385,7 +331,7 @@ bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *r
             total_wait_time += turnaround_time - pcb->total_burst_time; // Add to the total wait time
             dyn_array_pop_front(current_processes);                     // Remove the pcb from the queue
         }
-        enqueue_processes(ready_queue, current_processes, &current_wait_time, srtf_sort_burst); // Add the processes to the current_processes queue that have arrived and sort them by burst time
+        enqueue_processes(ready_queue, current_processes, &current_wait_time, compare_burst); // Add the processes to the current_processes queue that have arrived and sort them by burst time
     }
     dyn_array_destroy(current_processes);                                    // Free the current_processes array
     result->average_turnaround_time = total_turnaround_time / process_count; // Calculate and store the average turnaround time
@@ -393,25 +339,4 @@ bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *r
     result->total_run_time = current_wait_time;                              // Store the total run time
 
     return true; // Return true because all processes were successfully completed
-}
-
-// Function for sorting based on burst time
-int compare_remaining_burst_time(const void *a, const void *b)
-{
-    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a;
-    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b;
-
-    // Compare remaining burst times
-    if (pcb_a->remaining_burst_time < pcb_b->remaining_burst_time)
-    {
-        return -1;
-    }
-    else if (pcb_a->remaining_burst_time > pcb_b->remaining_burst_time)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
 }
