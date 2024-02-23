@@ -20,9 +20,33 @@ void virtual_cpu(ProcessControlBlock_t *process_control_block, uint32_t executio
 
 bool first_come_first_serve(dyn_array_t *ready_queue, ScheduleResult_t *result)
 {
-    UNUSED(ready_queue);
-    UNUSED(result);
-    return false;
+    // Invalid Params
+    if(ready_queue == NULL || result == NULL) return false;
+    
+    // No processes
+    size_t num_processes = dyn_array_size(ready_queue);
+    if(num_processes == 0) return false;
+    
+    // Iterate through the processes
+    for(size_t i = 0; i < num_processes; ++i){
+        ProcessControlBlock_t *current_process = dyn_array_at(ready_queue, i);
+
+        // Calculate times for the scheduled process
+        float waiting_time = result->total_run_time - current_process->arrival;
+        float burst_time = current_process->remaining_burst_time;
+
+        // Update the schedule result
+        result->total_run_time += burst_time;
+        result->average_waiting_time =
+            (result->average_waiting_time * i + waiting_time) / (i + 1);
+        result->average_turnaround_time =
+            (result->average_turnaround_time * i +
+             result->total_run_time - current_process->arrival) / (i + 1);
+    }
+
+    // Remove the scheduled process from the ready_queue
+    dyn_array_erase(ready_queue, 0);
+    return true;
 }
 
 bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
