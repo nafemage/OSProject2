@@ -155,4 +155,11 @@ int compare_arrival(const void *a, const void *b)
     }
     return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time; // The pcb with the shortest burst time should be processed before the other
 }
+
+void write_schedule_result(ScheduleResult_t *sr, uint32_t total_turnaround_time, uint32_t total_wait_time, uint32_t total_run_time, uint32_t process_count)
+{
+    sr->average_turnaround_time = (float)total_turnaround_time / process_count; // Calculate and store the average turnaround time
+    sr->average_waiting_time = (float)total_wait_time / process_count;          // Calculate and store the average wait time
+    sr->total_run_time = total_run_time;
+}
 /*End of process_scheduling helpers*/

@@ -91,9 +91,10 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
     }
 
     // Update the result structure with calculated averages
-    result->average_waiting_time = total_waiting_time / starting_queue_size;
-    result->average_turnaround_time = total_turnaround_time / starting_queue_size;
-    result->total_run_time = total_run_time;
+    write_schedule_result(result, total_turnaround_time, total_waiting_time, total_run_time, starting_queue_size);
+    // result->average_waiting_time = total_waiting_time / starting_queue_size;
+    // result->average_turnaround_time = total_turnaround_time / starting_queue_size;
+    // result->total_run_time = total_run_time;
 
     // Open the readme.md file for both reading and writing
     FILE *readme_file = fopen("../readme.md", "r+");
@@ -209,9 +210,10 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     }
 
     // Update the result structure with calculated averages
-    result->average_waiting_time = total_waiting_time / starting_queue_size;
-    result->average_turnaround_time = total_turnaround_time / starting_queue_size;
-    result->total_run_time = total_run_time;
+    write_schedule_result(result, total_turnaround_time, total_waiting_time, total_run_time, starting_queue_size);
+    // result->average_waiting_time = total_waiting_time / starting_queue_size;
+    // result->average_turnaround_time = total_turnaround_time / starting_queue_size;
+    // result->total_run_time = total_run_time;
 
     // Open the readme.md file for both reading and writing
     FILE *readme_file = fopen("../readme.md", "r+");
@@ -304,8 +306,8 @@ bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *r
         return false; // Return false if ready_queue is NULL (no pcbs to process) or result is NULL (no memory allocated for the result)
     }
     uint32_t process_count = ready_queue->size; // The number of processes in the queue
-    float total_turnaround_time = 0;            // The sum of all turnaround times
-    float total_wait_time = 0;                  // The sum of all wait times
+    uint32_t total_turnaround_time = 0;         // The sum of all turnaround times
+    uint32_t total_wait_time = 0;               // The sum of all wait times
 
     dyn_array_sort(ready_queue, compare_arrival); // sort array by arrival time (if equal then by burst time)
 
@@ -326,17 +328,15 @@ bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *r
         virtual_cpu(pcb, 1);                // Send pcb to the cpu (decrement burst time)
         if (pcb->remaining_burst_time == 0) // If the pcb has finished
         {
-            float turnaround_time = current_wait_time - pcb->arrival;   // The turnaround time for the pcb
-            total_turnaround_time += turnaround_time;                   // Add to the total turnaround time
-            total_wait_time += turnaround_time - pcb->total_burst_time; // Add to the total wait time
-            dyn_array_pop_front(current_processes);                     // Remove the pcb from the queue
+            uint32_t turnaround_time = current_wait_time - pcb->arrival; // The turnaround time for the pcb
+            total_turnaround_time += turnaround_time;                    // Add to the total turnaround time
+            total_wait_time += turnaround_time - pcb->total_burst_time;  // Add to the total wait time
+            dyn_array_pop_front(current_processes);                      // Remove the pcb from the queue
         }
         enqueue_processes(ready_queue, current_processes, &current_wait_time, compare_burst); // Add the processes to the current_processes queue that have arrived and sort them by burst time
     }
-    dyn_array_destroy(current_processes);                                    // Free the current_processes array
-    result->average_turnaround_time = total_turnaround_time / process_count; // Calculate and store the average turnaround time
-    result->average_waiting_time = total_wait_time / process_count;          // Calculate and store the average wait time
-    result->total_run_time = current_wait_time;                              // Store the total run time
+    dyn_array_destroy(current_processes); // Free the current_processes array
+    write_schedule_result(result, total_turnaround_time, total_wait_time, current_wait_time, process_count);
 
     return true; // Return true because all processes were successfully completed
 }
