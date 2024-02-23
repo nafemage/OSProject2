@@ -87,6 +87,26 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result) {
     result->average_turnaround_time = total_turnaround_time / starting_queue_size;
     result->total_run_time = total_run_time;
 
+    // Open the readme.md file for both reading and writing
+    FILE *readme_file = fopen("../readme.md", "r+");
+    if (readme_file == NULL) {
+        fprintf(stderr, "Error opening ../readme.md for reading and writing\n");
+        return false;
+    }
+
+    // Seek to the beginning of line 14
+    fseek(readme_file, 0, SEEK_SET);
+    for (int i = 0; i < 13; ++i)
+        while (fgetc(readme_file) != '\n');
+
+    // Update lines 14, 15, and 16 directly in the file
+    fprintf(readme_file, "Average Waiting Time: %f\n", result->average_waiting_time);
+    fprintf(readme_file, "Average Turnaround Time: %f\n", result->average_turnaround_time);
+    fprintf(readme_file, "Total Run Time: %lu\n", result->total_run_time);
+
+    // Close the file
+    fclose(readme_file);
+
     return true;
 }
 
@@ -171,6 +191,26 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     result->average_waiting_time = total_waiting_time / starting_queue_size;
     result->average_turnaround_time = total_turnaround_time / starting_queue_size;
     result->total_run_time = total_run_time;
+
+    // Open the readme.md file for both reading and writing
+    FILE *readme_file = fopen("../readme.md", "r+");
+    if (readme_file == NULL) {
+        fprintf(stderr, "Error opening ../readme.md for reading and writing\n");
+        return false;
+    }
+
+    // Seek to the beginning of line 14
+    fseek(readme_file, 0, SEEK_SET);
+    for (int i = 0; i < 13; ++i)
+        while (fgetc(readme_file) != '\n');
+
+    // Update lines 14, 15, and 16 directly in the file
+    fprintf(readme_file, "Average Waiting Time: %f\n", result->average_waiting_time);
+    fprintf(readme_file, "Average Turnaround Time: %f\n", result->average_turnaround_time);
+    fprintf(readme_file, "Total Run Time: %lu\n", result->total_run_time);
+
+    // Close the file
+    fclose(readme_file);
 
     return true;
 }
