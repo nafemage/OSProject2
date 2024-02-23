@@ -43,10 +43,10 @@ RM = /opt/software/software/CMake/3.16.4-GCCcore-9.3.0/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /homes/mschwinn/OSProject2/OSProject2
+CMAKE_SOURCE_DIR = /homes/hpfannen/hw2-repo-test/OSProject2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /homes/mschwinn/OSProject2/OSProject2/build
+CMAKE_BINARY_DIR = /homes/hpfannen/hw2-repo-test/OSProject2/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/utilities.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/utilities.dir/flags.make
 
 CMakeFiles/utilities.dir/src/utilities.c.o: CMakeFiles/utilities.dir/flags.make
 CMakeFiles/utilities.dir/src/utilities.c.o: ../src/utilities.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/utilities.dir/src/utilities.c.o"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/utilities.dir/src/utilities.c.o   -c /homes/mschwinn/OSProject2/OSProject2/src/utilities.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/utilities.dir/src/utilities.c.o"
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/utilities.dir/src/utilities.c.o   -c /homes/hpfannen/hw2-repo-test/OSProject2/src/utilities.c
 
 CMakeFiles/utilities.dir/src/utilities.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/utilities.dir/src/utilities.c.i"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /homes/mschwinn/OSProject2/OSProject2/src/utilities.c > CMakeFiles/utilities.dir/src/utilities.c.i
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /homes/hpfannen/hw2-repo-test/OSProject2/src/utilities.c > CMakeFiles/utilities.dir/src/utilities.c.i
 
 CMakeFiles/utilities.dir/src/utilities.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/utilities.dir/src/utilities.c.s"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /homes/mschwinn/OSProject2/OSProject2/src/utilities.c -o CMakeFiles/utilities.dir/src/utilities.c.s
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /homes/hpfannen/hw2-repo-test/OSProject2/src/utilities.c -o CMakeFiles/utilities.dir/src/utilities.c.s
 
 # Object files for target utilities
 utilities_OBJECTS = \
@@ -80,7 +80,7 @@ utilities_EXTERNAL_OBJECTS =
 libutilities.a: CMakeFiles/utilities.dir/src/utilities.c.o
 libutilities.a: CMakeFiles/utilities.dir/build.make
 libutilities.a: CMakeFiles/utilities.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libutilities.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libutilities.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/utilities.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/utilities.dir/link.txt --verbose=$(VERBOSE)
 
@@ -94,6 +94,6 @@ CMakeFiles/utilities.dir/clean:
 .PHONY : CMakeFiles/utilities.dir/clean
 
 CMakeFiles/utilities.dir/depend:
-	cd /homes/mschwinn/OSProject2/OSProject2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /homes/mschwinn/OSProject2/OSProject2 /homes/mschwinn/OSProject2/OSProject2 /homes/mschwinn/OSProject2/OSProject2/build /homes/mschwinn/OSProject2/OSProject2/build /homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/utilities.dir/DependInfo.cmake --color=$(COLOR)
+	cd /homes/hpfannen/hw2-repo-test/OSProject2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /homes/hpfannen/hw2-repo-test/OSProject2 /homes/hpfannen/hw2-repo-test/OSProject2 /homes/hpfannen/hw2-repo-test/OSProject2/build /homes/hpfannen/hw2-repo-test/OSProject2/build /homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles/utilities.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/utilities.dir/depend
 

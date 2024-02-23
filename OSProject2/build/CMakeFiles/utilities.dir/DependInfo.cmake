@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/homes/mschwinn/OSProject2/OSProject2/src/utilities.c" "/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/utilities.dir/src/utilities.c.o"
+  "/homes/hpfannen/hw2-repo-test/OSProject2/src/utilities.c" "/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles/utilities.dir/src/utilities.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -15,8 +15,8 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/process_scheduling.dir/DependInfo.cmake"
-  "/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/dyn_array.dir/DependInfo.cmake"
+  "/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles/process_scheduling.dir/DependInfo.cmake"
+  "/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles/dyn_array.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.
