@@ -3,5 +3,6 @@
 
 CMakeFiles/hw2_analysis.dir/src/analysis.c.o: ../include/dyn_array.h
 CMakeFiles/hw2_analysis.dir/src/analysis.c.o: ../include/processing_scheduling.h
+CMakeFiles/hw2_analysis.dir/src/analysis.c.o: ../include/utilities.h
 CMakeFiles/hw2_analysis.dir/src/analysis.c.o: ../src/analysis.c
 

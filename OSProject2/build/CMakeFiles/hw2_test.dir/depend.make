@@ -3,5 +3,7 @@
 
 CMakeFiles/hw2_test.dir/test/tests.cpp.o: ../include/dyn_array.h
 CMakeFiles/hw2_test.dir/test/tests.cpp.o: ../include/processing_scheduling.h
+CMakeFiles/hw2_test.dir/test/tests.cpp.o: ../include/utilities.h
+CMakeFiles/hw2_test.dir/test/tests.cpp.o: ../include/processing_scheduling.h
 CMakeFiles/hw2_test.dir/test/tests.cpp.o: ../test/tests.cpp
 

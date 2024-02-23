@@ -81,6 +81,8 @@ hw2_test: CMakeFiles/hw2_test.dir/test/tests.cpp.o
 hw2_test: CMakeFiles/hw2_test.dir/build.make
 hw2_test: libdyn_array.a
 hw2_test: libprocess_scheduling.a
+hw2_test: libutilities.a
+hw2_test: libprocess_scheduling.a
 hw2_test: libdyn_array.a
 hw2_test: CMakeFiles/hw2_test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable hw2_test"

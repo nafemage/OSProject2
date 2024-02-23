@@ -80,6 +80,8 @@ hw2_analysis_EXTERNAL_OBJECTS =
 hw2_analysis: CMakeFiles/hw2_analysis.dir/src/analysis.c.o
 hw2_analysis: CMakeFiles/hw2_analysis.dir/build.make
 hw2_analysis: libprocess_scheduling.a
+hw2_analysis: libutilities.a
+hw2_analysis: libprocess_scheduling.a
 hw2_analysis: libdyn_array.a
 hw2_analysis: CMakeFiles/hw2_analysis.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable hw2_analysis"
