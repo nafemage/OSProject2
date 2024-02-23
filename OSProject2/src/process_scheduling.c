@@ -377,7 +377,7 @@ bool shortest_remaining_time_first(dyn_array_t *ready_queue, ScheduleResult_t *r
         }
 
         current_wait_time++;                // Increment the elapsed time
-        virtual_cpu(pcb);                   // Send pcb to the cpu (decrement burst time)
+        virtual_cpu(pcb, 1);                // Send pcb to the cpu (decrement burst time)
         if (pcb->remaining_burst_time == 0) // If the pcb has finished
         {
             float turnaround_time = current_wait_time - pcb->arrival;   // The turnaround time for the pcb

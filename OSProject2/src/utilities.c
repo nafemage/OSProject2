@@ -28,6 +28,7 @@ ProcessControlBlock_t *create_pcb(uint32_t arrival, uint32_t priority, uint32_t 
     ptr->remaining_burst_time = remaining_burst_time;
     ptr->started = started;
     ptr->total_burst_time = remaining_burst_time;
+    ptr->completed = false;
     return ptr;
 }
 
