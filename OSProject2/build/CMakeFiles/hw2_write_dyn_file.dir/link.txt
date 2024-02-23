@@ -1,0 +1,1 @@
+/opt/software/software/GCCcore/9.3.0/bin/cc -std=c11 -Wall -Wextra -Wshadow -Werror  -rdynamic CMakeFiles/hw2_write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.o  -o hw2_write_dyn_file 

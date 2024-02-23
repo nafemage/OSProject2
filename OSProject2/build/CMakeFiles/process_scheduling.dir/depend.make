@@ -3,5 +3,6 @@
 
 CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o: ../include/dyn_array.h
 CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o: ../include/processing_scheduling.h
+CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o: ../include/utilities.h
 CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o: ../src/process_scheduling.c
 

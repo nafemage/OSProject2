@@ -111,6 +111,32 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named write_dyn_file
+
+# Build rule for target.
+write_dyn_file: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 write_dyn_file
+.PHONY : write_dyn_file
+
+# fast build rule for target.
+write_dyn_file/fast:
+	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/build
+.PHONY : write_dyn_file/fast
+
+#=============================================================================
+# Target rules for targets named hw2_write_dyn_file
+
+# Build rule for target.
+hw2_write_dyn_file: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hw2_write_dyn_file
+.PHONY : hw2_write_dyn_file
+
+# fast build rule for target.
+hw2_write_dyn_file/fast:
+	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/build
+.PHONY : hw2_write_dyn_file/fast
+
+#=============================================================================
 # Target rules for targets named dyn_array
 
 # Build rule for target.
@@ -137,6 +163,19 @@ hw2_test/fast:
 .PHONY : hw2_test/fast
 
 #=============================================================================
+# Target rules for targets named utilities
+
+# Build rule for target.
+utilities: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 utilities
+.PHONY : utilities
+
+# fast build rule for target.
+utilities/fast:
+	$(MAKE) -f CMakeFiles/utilities.dir/build.make CMakeFiles/utilities.dir/build
+.PHONY : utilities/fast
+
+#=============================================================================
 # Target rules for targets named process_scheduling
 
 # Build rule for target.
@@ -161,6 +200,36 @@ hw2_analysis: cmake_check_build_system
 hw2_analysis/fast:
 	$(MAKE) -f CMakeFiles/hw2_analysis.dir/build.make CMakeFiles/hw2_analysis.dir/build
 .PHONY : hw2_analysis/fast
+
+pcb_file_tests/write_dyn_file.o: pcb_file_tests/write_dyn_file.c.o
+
+.PHONY : pcb_file_tests/write_dyn_file.o
+
+# target to build an object file
+pcb_file_tests/write_dyn_file.c.o:
+	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.o
+	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.o
+.PHONY : pcb_file_tests/write_dyn_file.c.o
+
+pcb_file_tests/write_dyn_file.i: pcb_file_tests/write_dyn_file.c.i
+
+.PHONY : pcb_file_tests/write_dyn_file.i
+
+# target to preprocess a source file
+pcb_file_tests/write_dyn_file.c.i:
+	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.i
+	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.i
+.PHONY : pcb_file_tests/write_dyn_file.c.i
+
+pcb_file_tests/write_dyn_file.s: pcb_file_tests/write_dyn_file.c.s
+
+.PHONY : pcb_file_tests/write_dyn_file.s
+
+# target to generate assembly for a file
+pcb_file_tests/write_dyn_file.c.s:
+	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.s
+	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.s
+.PHONY : pcb_file_tests/write_dyn_file.c.s
 
 src/analysis.o: src/analysis.c.o
 
@@ -243,6 +312,33 @@ src/process_scheduling.c.s:
 	$(MAKE) -f CMakeFiles/process_scheduling.dir/build.make CMakeFiles/process_scheduling.dir/src/process_scheduling.c.s
 .PHONY : src/process_scheduling.c.s
 
+src/utilities.o: src/utilities.c.o
+
+.PHONY : src/utilities.o
+
+# target to build an object file
+src/utilities.c.o:
+	$(MAKE) -f CMakeFiles/utilities.dir/build.make CMakeFiles/utilities.dir/src/utilities.c.o
+.PHONY : src/utilities.c.o
+
+src/utilities.i: src/utilities.c.i
+
+.PHONY : src/utilities.i
+
+# target to preprocess a source file
+src/utilities.c.i:
+	$(MAKE) -f CMakeFiles/utilities.dir/build.make CMakeFiles/utilities.dir/src/utilities.c.i
+.PHONY : src/utilities.c.i
+
+src/utilities.s: src/utilities.c.s
+
+.PHONY : src/utilities.s
+
+# target to generate assembly for a file
+src/utilities.c.s:
+	$(MAKE) -f CMakeFiles/utilities.dir/build.make CMakeFiles/utilities.dir/src/utilities.c.s
+.PHONY : src/utilities.c.s
+
 test/tests.o: test/tests.cpp.o
 
 .PHONY : test/tests.o
@@ -277,11 +373,17 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... edit_cache"
+	@echo "... write_dyn_file"
+	@echo "... hw2_write_dyn_file"
 	@echo "... dyn_array"
 	@echo "... hw2_test"
+	@echo "... utilities"
 	@echo "... process_scheduling"
 	@echo "... hw2_analysis"
-	@echo "... edit_cache"
+	@echo "... pcb_file_tests/write_dyn_file.o"
+	@echo "... pcb_file_tests/write_dyn_file.i"
+	@echo "... pcb_file_tests/write_dyn_file.s"
 	@echo "... src/analysis.o"
 	@echo "... src/analysis.i"
 	@echo "... src/analysis.s"
@@ -291,6 +393,9 @@ help:
 	@echo "... src/process_scheduling.o"
 	@echo "... src/process_scheduling.i"
 	@echo "... src/process_scheduling.s"
+	@echo "... src/utilities.o"
+	@echo "... src/utilities.i"
+	@echo "... src/utilities.s"
 	@echo "... test/tests.o"
 	@echo "... test/tests.i"
 	@echo "... test/tests.s"

@@ -13,4 +13,8 @@ Add your scheduling algorithm analysis below this line in a readable format.
 ---------------------------------------------------------------------------
 Average Waiting Time: 2.000000
 Average Turnaround Time: 20.000000
-Total Run Time: 30
+Total Run time: 30
+584
+rage Waiting Time: 2.000000
+Average Turnaround Time: 20.000000
+Total Run time: 30

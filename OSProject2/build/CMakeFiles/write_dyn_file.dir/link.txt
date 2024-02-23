@@ -1,0 +1,2 @@
+/opt/software/software/binutils/2.34-GCCcore-9.3.0/bin/ar qc libwrite_dyn_file.a  CMakeFiles/write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.o
+/opt/software/software/binutils/2.34-GCCcore-9.3.0/bin/ranlib libwrite_dyn_file.a
