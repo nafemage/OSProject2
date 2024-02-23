@@ -22,6 +22,19 @@ extern "C"
 
     void print_schedule_result(ScheduleResult_t *result);
 
+    /*String checks for algorithm passed in through command line when running analysis exe*/
+    bool str_is_equal(char *str1, char *str2, int char_ct);
+
+    bool is_fcfs(char *str);
+
+    bool is_sjf(char *str);
+
+    bool is_priority(char *str);
+
+    bool is_rr(char *str);
+
+    bool is_srtf(char *str);
+
 #ifdef __cplusplus
 }
 #endif
