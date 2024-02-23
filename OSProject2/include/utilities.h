@@ -21,7 +21,8 @@ extern "C"
 
     dyn_array_t *create_dyn_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint32_t *remaining_burst_times, bool *started, int count);
 
-    void print_schedule_result(ScheduleResult_t *result);
+    // Prints to stdout if file is NULL
+    void print_schedule_result(ScheduleResult_t *result, FILE *file);
     /*End of test helpers*/
 
     /*Start of analysis helpers*/
@@ -50,6 +51,12 @@ extern "C"
     int compare_arrival(const void *a, const void *b);
 
     void write_schedule_result(ScheduleResult_t *sr, uint32_t total_turnaround_time, uint32_t total_wait_time, uint32_t total_run_time, uint32_t process_count);
+
+    FILE *get_readme();
+
+    void seek_file(FILE *file, int line_number);
+
+    bool print_to_readme(ScheduleResult_t *result, int line_number);
     /*End of process_scheduling helpers*/
 
 #ifdef __cplusplus

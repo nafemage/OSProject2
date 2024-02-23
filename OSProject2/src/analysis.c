@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
     if (algorithm_result)
     {
-        print_schedule_result(sr);
+        print_schedule_result(sr, NULL);
     }
     else
     {

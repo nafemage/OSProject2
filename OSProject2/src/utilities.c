@@ -55,11 +55,13 @@ dyn_array_t *create_dyn_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint
     return dyn_array;
 }
 
-void print_schedule_result(ScheduleResult_t *result)
+// Prints to stdout if file is NULL
+void print_schedule_result(ScheduleResult_t *result, FILE *file)
 {
-    printf("Average waiting time: %f\n", result->average_waiting_time);
-    printf("Average turnaround time: %f\n", result->average_turnaround_time);
-    printf("Run time: %lu\n", result->total_run_time);
+    FILE *output = file == NULL ? stdout : file;
+    fprintf(output, "Average Waiting Time: %f\n", result->average_waiting_time);
+    fprintf(output, "Average Turnaround Time: %f\n", result->average_turnaround_time);
+    fprintf(output, "Total Run time: %lu\n", result->total_run_time);
 }
 /*End of test helpers*/
 
@@ -161,5 +163,42 @@ void write_schedule_result(ScheduleResult_t *sr, uint32_t total_turnaround_time,
     sr->average_turnaround_time = (float)total_turnaround_time / process_count; // Calculate and store the average turnaround time
     sr->average_waiting_time = (float)total_wait_time / process_count;          // Calculate and store the average wait time
     sr->total_run_time = total_run_time;
+}
+
+#define READMELOC "../readme.md"
+
+FILE *get_readme()
+{
+    // Open the readme.md file for both reading and writing
+    FILE *readme_file = fopen(READMELOC, "r+");
+    if (readme_file == NULL)
+    {
+        fprintf(stderr, "Error opening ../readme.md for reading and writing\n");
+        return NULL;
+    }
+    return readme_file;
+}
+
+void seek_file(FILE *file, int line_number)
+{
+    // Seek to the beginning of line 'line_number'
+    fseek(file, 0, SEEK_SET);
+    for (int i = 0; i < line_number; ++i)
+        while (fgetc(file) != '\n')
+            ;
+}
+
+bool print_to_readme(ScheduleResult_t *result, int line_number)
+{
+    FILE *readme_file = get_readme();
+    if (readme_file == NULL)
+    {
+        return false;
+    }
+    seek_file(readme_file, line_number - 1);
+    print_schedule_result(result, readme_file);
+    // Close the file
+    fclose(readme_file);
+    return true;
 }
 /*End of process_scheduling helpers*/
