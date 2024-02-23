@@ -1,5 +1,6 @@
-/homes/mschwinn/hw2/build/CMakeFiles/edit_cache.dir
-/homes/mschwinn/hw2/build/CMakeFiles/rebuild_cache.dir
-/homes/mschwinn/hw2/build/CMakeFiles/hw2_test.dir
-/homes/mschwinn/hw2/build/CMakeFiles/dyn_array.dir
-/homes/mschwinn/hw2/build/CMakeFiles/hw2_analysis.dir
+/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/rebuild_cache.dir
+/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/dyn_array.dir
+/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/hw2_test.dir
+/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/process_scheduling.dir
+/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/hw2_analysis.dir
+/homes/mschwinn/OSProject2/OSProject2/build/CMakeFiles/edit_cache.dir
