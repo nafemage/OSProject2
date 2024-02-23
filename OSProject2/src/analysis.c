@@ -5,10 +5,11 @@
 #include "processing_scheduling.h"
 #include "utilities.h"
 
-#define FCFS "FCFS"
-#define P "P"
-#define RR "RR"
-#define SJF "SJF"
+/*Moved to utitiles.c*/
+// #define FCFS "FCFS"
+// #define P "P"
+// #define RR "RR"
+// #define SJF "SJF"
 
 // Add and comment your analysis code in this function.
 // THIS IS NOT FINISHED.
@@ -59,7 +60,8 @@ int main(int argc, char **argv)
     }
     else
     {
-        printf("Error: The schedule algorithm requested (%s) was not found.\n", algorithm);
+        printf("Error: The schedule algorithm requested \'%s\' was not found.\n", algorithm);
+        print_valid_algorithms();
         return EXIT_FAILURE;
     }
     // else if(is_priority(algorithm)){

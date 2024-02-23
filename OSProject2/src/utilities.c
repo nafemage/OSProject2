@@ -61,6 +61,12 @@ void print_schedule_result(ScheduleResult_t *result)
     printf("Run time: %lu\n", result->total_run_time);
 }
 
+#define FCFS "FCFS"
+#define P "P"
+#define RR "RR"
+#define SJF "SJF"
+#define SRTF "SRTF"
+
 bool str_is_equal(char *str1, char *str2, int char_ct)
 {
     return strncmp(str1, str2, char_ct) == 0;
@@ -68,25 +74,34 @@ bool str_is_equal(char *str1, char *str2, int char_ct)
 
 bool is_fcfs(char *str)
 {
-    return str_is_equal(str, "fcfs", 5) || str_is_equal(str, "first_come_first_serve", 23);
+    return str_is_equal(str, FCFS, 5) || str_is_equal(str, "first_come_first_serve", 23);
 }
 
 bool is_sjf(char *str)
 {
-    return str_is_equal(str, "sjf", 4) || str_is_equal(str, "shortest_job_first", 19);
+    return str_is_equal(str, SJF, 4) || str_is_equal(str, "shortest_job_first", 19);
 }
 
 bool is_priority(char *str)
 {
-    return str_is_equal(str, "p", 2) || str_is_equal(str, "priority", 10);
+    return str_is_equal(str, P, 2) || str_is_equal(str, "priority", 10);
 }
 
 bool is_rr(char *str)
 {
-    return str_is_equal(str, "rr", 3) || str_is_equal(str, "round_robin", 12);
+    return str_is_equal(str, RR, 3) || str_is_equal(str, "round_robin", 12);
 }
 
 bool is_srtf(char *str)
 {
-    return str_is_equal(str, "srtf", 5) || str_is_equal(str, "shortest_remaining_time_first", 30);
+    return str_is_equal(str, SRTF, 5) || str_is_equal(str, "shortest_remaining_time_first", 30);
+}
+
+void print_valid_algorithms()
+{
+    printf("The valid algorthims are:\n");
+    printf("First come first serve: \'%s\' OR \'first_come_first_serve\'.\n", FCFS);
+    printf("Shortest job first: \'%s\' OR \'shortest_job_first\'.\n", SJF);
+    printf("Round robin: \'%s\' OR \'round_robin\'.\n", RR);
+    printf("Shortest remaining time first: \'%s\' OR \'shortest_remaining_time_first\'.\n", SRTF);
 }

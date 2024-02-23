@@ -35,6 +35,8 @@ extern "C"
 
     bool is_srtf(char *str);
 
+    void print_valid_algorithms();
+
 #ifdef __cplusplus
 }
 #endif
