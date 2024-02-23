@@ -22,7 +22,7 @@ extern "C"
 
     typedef struct
     {
-        float average_waiting_time;    // the average waiting time in the ready queue until first schedue on the cpu
+        float average_waiting_time;    // the average waiting time in the ready queue until first schedule on the cpu
         float average_turnaround_time; // the average completion time of the PCBs
         unsigned long total_run_time;  // the total time to process all the PCBs in the ready queue
     } ScheduleResult_t;
@@ -47,7 +47,7 @@ extern "C"
 
     // Runs the Priority algorithm over the incoming ready_queue
     // \param ready queue a dyn_array of type ProcessControlBlock_t that contain be up to N elements
-    // \param result used for shortest job first stat tracking \ref ScheduleResult_t
+    // \param result used for priority stat tracking \ref ScheduleResult_t
     // \return true if function ran successful else false for an error
     bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result);
 

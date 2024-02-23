@@ -177,13 +177,193 @@ TEST(shortest_remaining_time_first, SuccessfulRun2)
     dyn_array_destroy(array);
 }
 
-// This is a test test message
-
 #define NUM_PCB 30
 #define QUANTUM 5 // Used for Robin Round for process as the run time limit
 
 unsigned int score;
 unsigned int total;
+
+TEST(shortest_job_first, ErrorChecking)
+{
+    // Null Ready Queue Pointer
+    dyn_array_t *null_ready_queue = NULL;
+    ScheduleResult_t result;
+    EXPECT_FALSE(shortest_job_first(null_ready_queue, &result));
+
+    // Ready Queue of size 0
+    dyn_array_t *zero_ready_queue = dyn_array_create(0, sizeof(ProcessControlBlock_t), NULL);
+    EXPECT_FALSE(shortest_job_first(zero_ready_queue, &result));
+    dyn_array_destroy(zero_ready_queue);
+
+    // Null Result Pointer
+    dyn_array_t *valid_ready_queue = dyn_array_create(1, sizeof(ProcessControlBlock_t), NULL);
+    EXPECT_FALSE(shortest_job_first(valid_ready_queue, NULL));
+    dyn_array_destroy(valid_ready_queue);
+}
+
+TEST(shortest_job_first, StandardCase)
+{
+    // Create a dyn_array to hold ProcessControlBlock structures
+    dyn_array_t *ready_queue = dyn_array_create(5, sizeof(ProcessControlBlock_t), NULL);
+    ScheduleResult_t result;
+    result.average_waiting_time = 0.0;
+    result.average_turnaround_time = 0.0;
+    result.total_run_time = 0.0;
+
+    // Create multiple PCB's with differing burst times
+    for (int i = 0; i < 5; ++i)
+    {
+        ProcessControlBlock_t pcb;
+        pcb.remaining_burst_time = (i + 1) * 2;
+        pcb.priority = i + 1;
+        pcb.arrival = 0;
+        pcb.started = false;
+        pcb.completed = false;
+
+        // Add the ProcessControlBlock to the dyn_array
+        bool success = dyn_array_push_back(ready_queue, &pcb);
+        if (!success)
+        {
+            dyn_array_destroy(ready_queue);
+            FAIL();
+        }
+    }
+
+    // Run the SJF scheduling algorithm and check results
+    bool sjf_result = shortest_job_first(ready_queue, &result);
+    EXPECT_TRUE(sjf_result);
+    EXPECT_EQ(result.average_waiting_time, 8);
+    EXPECT_EQ(result.average_turnaround_time, 14);
+    EXPECT_EQ(result.total_run_time, (unsigned long)30);
+    dyn_array_destroy(ready_queue);
+}
+
+TEST(shortest_job_first, EqualBurstTime)
+{
+    // Create a dyn_array to hold ProcessControlBlock structures
+    dyn_array_t *ready_queue = dyn_array_create(5, sizeof(ProcessControlBlock_t), NULL);
+    ScheduleResult_t result;
+
+    // Create multiple PCB's with the same burst times
+    for (int i = 0; i < 5; ++i)
+    {
+        ProcessControlBlock_t pcb;
+        pcb.remaining_burst_time = 10;
+        pcb.priority = i + 1;
+        pcb.arrival = i * 20;
+        pcb.started = false;
+        pcb.completed = false;
+
+        // Add the ProcessControlBlock to the dyn_array
+        bool success = dyn_array_push_back(ready_queue, &pcb);
+        if (!success)
+        {
+            dyn_array_destroy(ready_queue);
+            FAIL();
+        }
+    }
+
+    // Run the SJF scheduling algorithm
+    bool sjf_result = shortest_job_first(ready_queue, &result);
+    EXPECT_TRUE(sjf_result);
+    EXPECT_EQ(result.average_waiting_time, 0);
+    EXPECT_EQ(result.average_turnaround_time, 10);
+    EXPECT_EQ(result.total_run_time, (unsigned long)90);
+    dyn_array_destroy(ready_queue);
+}
+
+// Unit tests for Round Robin
+TEST(round_robin, ErrorChecking)
+{
+    // Null Ready Queue Pointer
+    dyn_array_t *null_ready_queue = NULL;
+    ScheduleResult_t result;
+    EXPECT_FALSE(round_robin(null_ready_queue, &result, 1));
+
+    // Ready Queue of size 0
+    dyn_array_t *zero_ready_queue = dyn_array_create(0, sizeof(ProcessControlBlock_t), NULL);
+    EXPECT_FALSE(round_robin(zero_ready_queue, &result, 1));
+    dyn_array_destroy(zero_ready_queue);
+
+    // Null Result Pointer
+    dyn_array_t *valid_ready_queue = dyn_array_create(1, sizeof(ProcessControlBlock_t), NULL);
+    EXPECT_FALSE(round_robin(valid_ready_queue, NULL, 1));
+
+    // Invalid Quantum
+    EXPECT_FALSE(round_robin(valid_ready_queue, NULL, 0));
+    EXPECT_FALSE(round_robin(valid_ready_queue, NULL, -1));
+    dyn_array_destroy(valid_ready_queue);
+}
+
+TEST(round_robin, StandardCase)
+{
+    // Create a dyn_array to hold ProcessControlBlock structures
+    dyn_array_t *ready_queue = dyn_array_create(5, sizeof(ProcessControlBlock_t), NULL);
+    ScheduleResult_t result;
+    size_t quantum = 1;
+
+    // Create multiple PCB's with differing burst times
+    for (int i = 0; i < 5; ++i)
+    {
+        ProcessControlBlock_t pcb;
+        pcb.remaining_burst_time = 10;
+        pcb.priority = i + 1;
+        pcb.arrival = i * 5;
+        pcb.started = false;
+        pcb.completed = false;
+
+        // Add the ProcessControlBlock to the dyn_array
+        bool success = dyn_array_push_back(ready_queue, &pcb);
+        if (!success)
+        {
+            dyn_array_destroy(ready_queue);
+            FAIL();
+        }
+    }
+
+    // Run the SJF scheduling algorithm
+    bool round_robin_result = round_robin(ready_queue, &result, quantum);
+    EXPECT_TRUE(round_robin_result);
+    EXPECT_EQ(result.average_waiting_time, (float)0.8);
+    EXPECT_EQ(result.average_turnaround_time, (float)29.2);
+    EXPECT_EQ(result.total_run_time, (unsigned long)50);
+    dyn_array_destroy(ready_queue);
+}
+
+TEST(round_robin, EqualBurstTime)
+{
+    // Create a dyn_array to hold ProcessControlBlock structures
+    dyn_array_t *ready_queue = dyn_array_create(5, sizeof(ProcessControlBlock_t), NULL);
+    ScheduleResult_t result;
+    size_t quantum = 1;
+
+    // Create multiple PCB's with differing burst times
+    for (int i = 0; i < 5; ++i)
+    {
+        ProcessControlBlock_t pcb;
+        pcb.remaining_burst_time = (i + 1) * 2;
+        pcb.priority = i + 1;
+        pcb.arrival = 0;
+        pcb.started = false;
+        pcb.completed = false;
+
+        // Add the ProcessControlBlock to the dyn_array
+        bool success = dyn_array_push_back(ready_queue, &pcb);
+        if (!success)
+        {
+            dyn_array_destroy(ready_queue);
+            FAIL();
+        }
+    }
+
+    // Run the SJF scheduling algorithm
+    bool round_robin_result = round_robin(ready_queue, &result, quantum);
+    EXPECT_TRUE(round_robin_result);
+    EXPECT_EQ(result.average_waiting_time, 2);
+    EXPECT_EQ(result.average_turnaround_time, 20);
+    EXPECT_EQ(result.total_run_time, (unsigned long)30);
+    dyn_array_destroy(ready_queue);
+}
 
 class GradeEnvironment : public testing::Environment
 {
