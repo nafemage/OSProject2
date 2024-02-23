@@ -191,7 +191,7 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     write_schedule_result(result, total_turnaround_time, total_waiting_time, total_run_time, starting_queue_size);
 
     // Print to the readme.md file
-    print_to_readme(result, 14);
+    print_to_readme(result, 18);
     return true;
 }
 
