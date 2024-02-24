@@ -12,6 +12,32 @@ You can manually copy the time analysis from console and paste it to this readme
 Add your scheduling algorithm analysis below this line in a readable format. 
 ---------------------------------------------------------------------------
 Most recent run:
+Average Waiting Time: 11.750000
+Average Turnaround Time: 24.250000
+Total Run time: 50
+
+
+
+
+----------------------------
+Schedule Results for pcb.bin
+----------------------------
+First Come First Serve:
+Average Waiting Time: 16.000000
+Average Turnaround Time: 28.500000
+Total Run time: 50
+
+Shortest Job First:
 Average Waiting Time: 14.750000
 Average Turnaround Time: 27.250000
+Total Run time: 50
+
+Shortest Remaining Time First:
+Average Waiting Time: 11.750000
+Average Turnaround Time: 24.250000
+Total Run time: 50
+
+Round Robin (Quantum 1):
+Average Waiting Time: 22.500000
+Average Turnaround Time: 35.000000
 Total Run time: 50
