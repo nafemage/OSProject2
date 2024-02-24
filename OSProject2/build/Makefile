@@ -111,30 +111,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named write_dyn_file
+# Target rules for targets named hw2write_pcb_file
 
 # Build rule for target.
-write_dyn_file: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 write_dyn_file
-.PHONY : write_dyn_file
+hw2write_pcb_file: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hw2write_pcb_file
+.PHONY : hw2write_pcb_file
 
 # fast build rule for target.
-write_dyn_file/fast:
-	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/build
-.PHONY : write_dyn_file/fast
+hw2write_pcb_file/fast:
+	$(MAKE) -f CMakeFiles/hw2write_pcb_file.dir/build.make CMakeFiles/hw2write_pcb_file.dir/build
+.PHONY : hw2write_pcb_file/fast
 
 #=============================================================================
-# Target rules for targets named hw2_write_dyn_file
+# Target rules for targets named write_pcb_file
 
 # Build rule for target.
-hw2_write_dyn_file: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 hw2_write_dyn_file
-.PHONY : hw2_write_dyn_file
+write_pcb_file: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 write_pcb_file
+.PHONY : write_pcb_file
 
 # fast build rule for target.
-hw2_write_dyn_file/fast:
-	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/build
-.PHONY : hw2_write_dyn_file/fast
+write_pcb_file/fast:
+	$(MAKE) -f CMakeFiles/write_pcb_file.dir/build.make CMakeFiles/write_pcb_file.dir/build
+.PHONY : write_pcb_file/fast
 
 #=============================================================================
 # Target rules for targets named dyn_array
@@ -201,35 +201,35 @@ hw2_analysis/fast:
 	$(MAKE) -f CMakeFiles/hw2_analysis.dir/build.make CMakeFiles/hw2_analysis.dir/build
 .PHONY : hw2_analysis/fast
 
-pcb_file_tests/write_dyn_file.o: pcb_file_tests/write_dyn_file.c.o
+pcb_file_tests/write_pcb_file.o: pcb_file_tests/write_pcb_file.c.o
 
-.PHONY : pcb_file_tests/write_dyn_file.o
+.PHONY : pcb_file_tests/write_pcb_file.o
 
 # target to build an object file
-pcb_file_tests/write_dyn_file.c.o:
-	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.o
-	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.o
-.PHONY : pcb_file_tests/write_dyn_file.c.o
+pcb_file_tests/write_pcb_file.c.o:
+	$(MAKE) -f CMakeFiles/hw2write_pcb_file.dir/build.make CMakeFiles/hw2write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o
+	$(MAKE) -f CMakeFiles/write_pcb_file.dir/build.make CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o
+.PHONY : pcb_file_tests/write_pcb_file.c.o
 
-pcb_file_tests/write_dyn_file.i: pcb_file_tests/write_dyn_file.c.i
+pcb_file_tests/write_pcb_file.i: pcb_file_tests/write_pcb_file.c.i
 
-.PHONY : pcb_file_tests/write_dyn_file.i
+.PHONY : pcb_file_tests/write_pcb_file.i
 
 # target to preprocess a source file
-pcb_file_tests/write_dyn_file.c.i:
-	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.i
-	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.i
-.PHONY : pcb_file_tests/write_dyn_file.c.i
+pcb_file_tests/write_pcb_file.c.i:
+	$(MAKE) -f CMakeFiles/hw2write_pcb_file.dir/build.make CMakeFiles/hw2write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.i
+	$(MAKE) -f CMakeFiles/write_pcb_file.dir/build.make CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.i
+.PHONY : pcb_file_tests/write_pcb_file.c.i
 
-pcb_file_tests/write_dyn_file.s: pcb_file_tests/write_dyn_file.c.s
+pcb_file_tests/write_pcb_file.s: pcb_file_tests/write_pcb_file.c.s
 
-.PHONY : pcb_file_tests/write_dyn_file.s
+.PHONY : pcb_file_tests/write_pcb_file.s
 
 # target to generate assembly for a file
-pcb_file_tests/write_dyn_file.c.s:
-	$(MAKE) -f CMakeFiles/write_dyn_file.dir/build.make CMakeFiles/write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.s
-	$(MAKE) -f CMakeFiles/hw2_write_dyn_file.dir/build.make CMakeFiles/hw2_write_dyn_file.dir/pcb_file_tests/write_dyn_file.c.s
-.PHONY : pcb_file_tests/write_dyn_file.c.s
+pcb_file_tests/write_pcb_file.c.s:
+	$(MAKE) -f CMakeFiles/hw2write_pcb_file.dir/build.make CMakeFiles/hw2write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.s
+	$(MAKE) -f CMakeFiles/write_pcb_file.dir/build.make CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.s
+.PHONY : pcb_file_tests/write_pcb_file.c.s
 
 src/analysis.o: src/analysis.c.o
 
@@ -374,16 +374,16 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... write_dyn_file"
-	@echo "... hw2_write_dyn_file"
+	@echo "... hw2write_pcb_file"
+	@echo "... write_pcb_file"
 	@echo "... dyn_array"
 	@echo "... hw2_test"
 	@echo "... utilities"
 	@echo "... process_scheduling"
 	@echo "... hw2_analysis"
-	@echo "... pcb_file_tests/write_dyn_file.o"
-	@echo "... pcb_file_tests/write_dyn_file.i"
-	@echo "... pcb_file_tests/write_dyn_file.s"
+	@echo "... pcb_file_tests/write_pcb_file.o"
+	@echo "... pcb_file_tests/write_pcb_file.i"
+	@echo "... pcb_file_tests/write_pcb_file.s"
 	@echo "... src/analysis.o"
 	@echo "... src/analysis.i"
 	@echo "... src/analysis.s"

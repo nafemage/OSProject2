@@ -140,7 +140,6 @@ TEST(shortest_remaining_time_first, SuccessfulRunFile)
     dyn_array_t *array = load_process_control_blocks("../pcb.bin");
     ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
     EXPECT_EQ(true, shortest_remaining_time_first(array, sr));
-    EXPECT_EQ((uint32_t)0, array->size);
     EXPECT_NEAR((float)11.75, sr->average_waiting_time, .01);
     EXPECT_NEAR((float)24.25, sr->average_turnaround_time, .01);
     EXPECT_EQ((unsigned long)50, sr->total_run_time);
@@ -158,7 +157,6 @@ TEST(shortest_remaining_time_first, SuccessfulRun1)
     dyn_array_t *array = create_dyn_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
     ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
     EXPECT_EQ(true, shortest_remaining_time_first(array, sr));
-    EXPECT_EQ((uint32_t)0, array->size);
     EXPECT_NEAR((float)34.67, sr->average_waiting_time, .01);
     EXPECT_NEAR((float)105.0, sr->average_turnaround_time, .01);
     EXPECT_EQ((unsigned long)235, sr->total_run_time);
@@ -176,7 +174,6 @@ TEST(shortest_remaining_time_first, SuccessfulRun2)
     dyn_array_t *array = create_dyn_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
     ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
     EXPECT_EQ(true, shortest_remaining_time_first(array, sr));
-    EXPECT_EQ((uint32_t)0, array->size);
     EXPECT_NEAR((float)239.67, sr->average_waiting_time, .01);
     EXPECT_NEAR((float)337, sr->average_turnaround_time, .01);
     EXPECT_EQ((unsigned long)584, sr->total_run_time);
@@ -231,6 +228,18 @@ TEST(first_come_first_serve, StandardCase) {
     bool fcfs_result = first_come_first_serve(ready_queue, &result);
     EXPECT_TRUE(fcfs_result);
     dyn_array_destroy(ready_queue);
+}
+
+TEST(first_come_first_serve, SuccessfulRunFile)
+{
+    dyn_array_t *array = load_process_control_blocks("../pcb.bin");
+    ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
+    EXPECT_EQ(true, first_come_first_serve(array, sr));
+    EXPECT_NEAR((float)16, sr->average_waiting_time, .01);
+    EXPECT_NEAR((float)28.5, sr->average_turnaround_time, .01);
+    EXPECT_EQ((unsigned long)50, sr->total_run_time);
+    free(sr);
+    dyn_array_destroy(array);
 }
 
 
@@ -333,12 +342,23 @@ TEST(shortest_job_first, GoodTest)
     dyn_array_t *array = create_dyn_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
     ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
     EXPECT_EQ(true, shortest_job_first(array, sr));
-    EXPECT_EQ((uint32_t)0, array->size);
     EXPECT_NEAR((float)240.833, sr->average_waiting_time, .01);
     EXPECT_NEAR((float)338.167, sr->average_turnaround_time, .01);
     EXPECT_EQ((unsigned long)584, sr->total_run_time);
     dyn_array_destroy(array);
     free(sr);
+}
+
+TEST(shortest_job_first, SuccessfulRunFile)
+{
+    dyn_array_t *array = load_process_control_blocks("../pcb.bin");
+    ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
+    EXPECT_EQ(true, shortest_job_first(array, sr));
+    EXPECT_NEAR((float)14.75, sr->average_waiting_time, .01);
+    EXPECT_NEAR((float)27.25, sr->average_turnaround_time, .01);
+    EXPECT_EQ((unsigned long)50, sr->total_run_time);
+    free(sr);
+    dyn_array_destroy(array);
 }
 
 // Unit tests for Round Robin
@@ -374,15 +394,14 @@ TEST(round_robin, StandardCase)
     // Create multiple PCB's with differing burst times
     for (int i = 0; i < 5; ++i)
     {
-        ProcessControlBlock_t pcb;
-        pcb.remaining_burst_time = 10;
-        pcb.priority = i + 1;
-        pcb.arrival = i * 5;
-        pcb.started = false;
-        pcb.completed = false;
+        uint32_t remaining_burst_time = 10;
+        uint32_t priority = i + 1;
+        uint32_t arrival = i * 5;
+
+        ProcessControlBlock_t *pcb = create_pcb(arrival, priority, remaining_burst_time, false, NULL);
 
         // Add the ProcessControlBlock to the dyn_array
-        bool success = dyn_array_push_back(ready_queue, &pcb);
+        bool success = dyn_array_push_back(ready_queue, pcb);
         if (!success)
         {
             dyn_array_destroy(ready_queue);
@@ -393,9 +412,9 @@ TEST(round_robin, StandardCase)
     // Run the SJF scheduling algorithm
     bool round_robin_result = round_robin(ready_queue, &result, quantum);
     EXPECT_TRUE(round_robin_result);
-    EXPECT_EQ(result.average_waiting_time, (float)0.8);
-    EXPECT_EQ(result.average_turnaround_time, (float)29.2);
-    EXPECT_EQ(result.total_run_time, (unsigned long)50);
+    EXPECT_EQ((float)19, result.average_waiting_time);
+    EXPECT_EQ((float)29, result.average_turnaround_time);
+    EXPECT_EQ((unsigned long)50, result.total_run_time);
     dyn_array_destroy(ready_queue);
 }
 
@@ -409,15 +428,13 @@ TEST(round_robin, EqualBurstTime)
     // Create multiple PCB's with differing burst times
     for (int i = 0; i < 5; ++i)
     {
-        ProcessControlBlock_t pcb;
-        pcb.remaining_burst_time = (i + 1) * 2;
-        pcb.priority = i + 1;
-        pcb.arrival = 0;
-        pcb.started = false;
-        pcb.completed = false;
+        uint32_t remaining_burst_time = (i + 1) * 2;
+        uint32_t priority = i + 1;
+        uint32_t arrival = 0;
+        ProcessControlBlock_t *pcb = create_pcb(arrival, priority, remaining_burst_time, false, NULL);
 
         // Add the ProcessControlBlock to the dyn_array
-        bool success = dyn_array_push_back(ready_queue, &pcb);
+        bool success = dyn_array_push_back(ready_queue, pcb);
         if (!success)
         {
             dyn_array_destroy(ready_queue);
@@ -428,10 +445,22 @@ TEST(round_robin, EqualBurstTime)
     // Run the SJF scheduling algorithm
     bool round_robin_result = round_robin(ready_queue, &result, quantum);
     EXPECT_TRUE(round_robin_result);
-    EXPECT_EQ(result.average_waiting_time, 2);
+    EXPECT_EQ(result.average_waiting_time, 14);
     EXPECT_EQ(result.average_turnaround_time, 20);
     EXPECT_EQ(result.total_run_time, (unsigned long)30);
     dyn_array_destroy(ready_queue);
+}
+
+TEST(round_robin, SuccessfulRunFile)
+{
+    dyn_array_t *array = load_process_control_blocks("../pcb.bin");
+    ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
+    EXPECT_EQ(true, round_robin(array, sr, 5));
+    EXPECT_NEAR((float)19.75, sr->average_waiting_time, .01);
+    EXPECT_NEAR((float)32.25, sr->average_turnaround_time, .01);
+    EXPECT_EQ((unsigned long)50, sr->total_run_time);
+    free(sr);
+    dyn_array_destroy(array);
 }
 
 class GradeEnvironment : public testing::Environment

@@ -107,6 +107,7 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
 
         // Get the PCB with the shortest remaining burst time
         ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_at(ready_queue, pcb_index);
+
         // Mark PCB as started
         pcb->started = true;
 
@@ -115,10 +116,6 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
         float turnaround_time = total_run_time - pcb->arrival;
         total_turnaround_time += turnaround_time;
         total_waiting_time += turnaround_time - pcb->remaining_burst_time;
-        
-        // total_waiting_time += total_run_time - pcb->arrival;
-        // total_turnaround_time += total_run_time - pcb->arrival + pcb->remaining_burst_time;
-        // total_run_time += pcb->remaining_burst_time;
 
         // Execute the process
         virtual_cpu(pcb, pcb->remaining_burst_time);
@@ -128,12 +125,6 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
 
         // Remove the processed PCB from the ready_queue
         dyn_array_erase(ready_queue, pcb_index);
-        // else
-        // {
-        //     // If the PCB doesn't meet the standards, move it to the end of the queue
-        //     dyn_array_push_back(ready_queue, pcb);
-        //     dyn_array_erase(ready_queue, 0);
-        // }
     }
 
     // Update the result structure with calculated averages
@@ -160,75 +151,69 @@ bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quan
     float total_turnaround_time = 0.0;
     unsigned long total_run_time = 0;
     int starting_queue_size = dyn_array_size(ready_queue);
-
+    dyn_array_sort(ready_queue, compare_arrival);
+    dyn_array_t *arrived_processes = dyn_array_create(0, sizeof(ProcessControlBlock_t), NULL); // dyn_array fors holding the processes that have arrived
+    ProcessControlBlock_t *first_pcb = (ProcessControlBlock_t *)dyn_array_at(ready_queue, 0);
+    dyn_array_push_back(arrived_processes, first_pcb);
+    total_run_time = first_pcb->arrival;
+    dyn_array_erase(ready_queue, 0);
+    
     // Process each PCB in the ready queue until all are removed
-    while (dyn_array_size(ready_queue) > 0)
-    {
-        // Find the shortest arrival time among all PCBs
-        uint32_t shortest_arrival_time = UINT32_MAX;
+    do {
 
-        for (size_t i = 0; i < dyn_array_size(ready_queue); ++i)
-        {
-            const ProcessControlBlock_t *pcb = (const ProcessControlBlock_t *)dyn_array_at(ready_queue, i);
-
-            if (pcb->arrival < shortest_arrival_time)
-            {
-                shortest_arrival_time = pcb->arrival;
-            }
-        }
-
-        // Move total_run_time forward by the shortest arrival time
-        total_run_time = (shortest_arrival_time > total_run_time) ? shortest_arrival_time : total_run_time;
-
-        // Get the next pcb in the queue
-        ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_at(ready_queue, 0);
-
-        // Check if the PCB meets the correct standards
-        if (pcb->arrival <= total_run_time && !pcb->completed)
-        {
-            // If PCB is being started for the first time
-            if (!pcb->started)
-                total_waiting_time += total_run_time - pcb->arrival;
-
-            // Mark PCB as started
+        ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_at(arrived_processes, 0);
+        // Mark PCB as started
+        if(!pcb->started){
             pcb->started = true;
+        }
+        
+        // Depending on whether the process will be executed in its entirety...
+        if (pcb->remaining_burst_time <= quantum)
+        {
+           
+            // Update statistics
+            total_run_time += pcb->remaining_burst_time;
+            float turnaround_time = total_run_time - pcb->arrival;
+            total_turnaround_time += turnaround_time;
+            total_waiting_time += turnaround_time - pcb->total_burst_time;
 
-            // Depending on whether the process will be executed in its entirety...
-            if (pcb->remaining_burst_time <= quantum)
-            {
-                // Update statistics
-                total_turnaround_time += total_run_time - pcb->arrival + pcb->remaining_burst_time;
-                total_run_time += pcb->remaining_burst_time;
+            // Execute the process
+            virtual_cpu(pcb, pcb->remaining_burst_time);
 
-                // Execute the process
-                virtual_cpu(pcb, pcb->remaining_burst_time);
+            // Mark PCB as completed
+            pcb->completed = true;
 
-                // Mark PCB as completed
-                pcb->completed = true;
-
-                // Remove the processed PCB from the ready_queue
-                dyn_array_erase(ready_queue, 0);
-            }
-            else
-            {
-                // Update statistics
-                total_run_time += quantum;
-
-                // Execute the process for the quantum amount
-                virtual_cpu(pcb, quantum);
-
-                // Move PCB to the end of the queue, but DONT erase it
-                dyn_array_push_back(ready_queue, pcb);
-                dyn_array_erase(ready_queue, 0);
-            }
+            // Remove the processed PCB from the ready_queue
+            dyn_array_erase(arrived_processes, 0);
         }
         else
         {
-            // If the PCB doesn't meet the standards, move it to the end of the queue
-            dyn_array_push_back(ready_queue, pcb);
-            dyn_array_erase(ready_queue, 0);
+            // Update statistics
+            total_run_time += quantum;
+
+            // Execute the process for the quantum amount
+            virtual_cpu(pcb, quantum);
+
+        while(dyn_array_size(ready_queue) > 0)
+        {
+            ProcessControlBlock_t *front_pcb = (ProcessControlBlock_t *)dyn_array_at(ready_queue, 0);
+            if(dyn_array_size(arrived_processes) == 0){
+                total_run_time = front_pcb->arrival;
+            }
+            if(front_pcb->arrival <= total_run_time)
+            {
+                dyn_array_push_back(arrived_processes, front_pcb);
+                dyn_array_erase(ready_queue, 0);
+            } else {
+                break;
+            }
         }
-    }
+
+            // Move PCB to the end of the queue, but DONT erase it
+            dyn_array_push_back(arrived_processes, pcb);
+            dyn_array_erase(arrived_processes, 0);
+        }
+    } while (dyn_array_size(arrived_processes) > 0);
 
     // Update the result structure with calculated averages
     write_schedule_result(result, total_turnaround_time, total_waiting_time, total_run_time, starting_queue_size);
@@ -262,25 +247,28 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
     for (uint32_t i = 0; i < pcb_count; i++) // Iterate through pcb_count
     {
         ProcessControlBlock_t *pcb = &(pcb_array[i]);                                 // Get the current pcb to read values for
-        pcb->started = false;                                                         // Set the started value of the pcb to false
-        elements_read = fread(&(pcb->remaining_burst_time), sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the burst time) and update the pcb's burst time
+        uint32_t remaining_burst_time;                                                //Stores the remaining burst time
+        uint32_t priority;                                                            //Stores the priority
+        uint32_t arrival;                                                             //Store the arrival time
+        elements_read = fread(&remaining_burst_time, sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the burst time) and update the pcb's burst time
         if (elements_read != 1)
         {
             free(pcb_array); // Free the pcb_array since an invalid number of elements were read (most likely 0 or an error) meaning the file is invalid
             return NULL;     // Return NULL if less than 1 or more than 1 elements were read
         }
-        elements_read = fread(&(pcb->priority), sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the priority) and update the pcb's priority
+        elements_read = fread(&priority, sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the priority) and update the pcb's priority
         if (elements_read != 1)
         {
             free(pcb_array); // Free the pcb_array since an invalid number of elements were read (most likely 0 or an error) meaning the file is invalid
             return NULL;     // Return NULL if less than 1 or more than 1 elements were read
         }
-        elements_read = fread(&(pcb->arrival), sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the arrival) and update the pcb's arrival
+        elements_read = fread(&arrival, sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the arrival) and update the pcb's arrival
         if (elements_read != 1)
         {
             free(pcb_array); // Free the pcb_array since an invalid number of elements were read (most likely 0 or an error) meaning the file is invalid
             return NULL;     // Return NULL if less than 1 or more than 1 elements were read
         }
+        create_pcb( arrival,  priority,  remaining_burst_time, false, pcb); //Initialize the pcb with the read values
     }
     fclose(fp);                                                                                           // Close the file
     dyn_array_t *dyn_array = dyn_array_import(pcb_array, pcb_count, sizeof(ProcessControlBlock_t), NULL); // Create a dyn_array out of the pcb_array

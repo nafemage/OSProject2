@@ -224,6 +224,9 @@ utilities_LIB_DEPENDS:STATIC=general;process_scheduling;
 //Dependencies for the target
 write_dyn_file_LIB_DEPENDS:STATIC=general;dyn_array;
 
+//Dependencies for the target
+write_pcb_file_LIB_DEPENDS:STATIC=general;dyn_array;
+
 
 ########################
 # INTERNAL cache entries

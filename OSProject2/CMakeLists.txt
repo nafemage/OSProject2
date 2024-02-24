@@ -44,8 +44,8 @@ target_compile_definitions(${PROJECT_NAME}_test PRIVATE)
 target_link_libraries(${PROJECT_NAME}_test gtest pthread dyn_array process_scheduling utilities)
 
 # Writing dyn_array to file dependencies
-add_library(write_dyn_file pcb_file_tests/write_dyn_file)
+add_library(write_pcb_file pcb_file_tests/write_pcb_file)
 
-target_link_libraries(write_dyn_file dyn_array)
+target_link_libraries(write_pcb_file dyn_array)
 
-add_executable(${PROJECT_NAME}_write_dyn_file pcb_file_tests/write_dyn_file.c)
+add_executable(${PROJECT_NAME}write_pcb_file pcb_file_tests/write_pcb_file.c)
