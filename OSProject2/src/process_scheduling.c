@@ -7,10 +7,6 @@
 #include "processing_scheduling.h"
 #include "utilities.h"
 
-// You might find this handy.  I put it around unused parameters, but you should
-// remove it before you submit. Just allows things to compile initially.
-#define UNUSED(x) (void)(x)
-
 // Private function for decreasing the execution time of a process
 void virtual_cpu(ProcessControlBlock_t *process_control_block, uint32_t execution_time)
 {
@@ -135,12 +131,12 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
     return true;
 }
 
-bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result)
-{
-    UNUSED(ready_queue);
-    UNUSED(result);
-    return false;
-}
+// bool priority(dyn_array_t *ready_queue, ScheduleResult_t *result)
+// {
+//     UNUSED(ready_queue);
+//     UNUSED(result);
+//     return false;
+// }
 
 bool round_robin(dyn_array_t *ready_queue, ScheduleResult_t *result, size_t quantum)
 {
@@ -277,13 +273,6 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
             return NULL;     // Return NULL if less than 1 or more than 1 elements were read
         }
     }
-    // if (!feof(fp)) // Check if end of file (eof) hasn't been reached
-    // {
-    //     printf("Not end of file");
-    //     fclose(fp);      // Close the file
-    //     free(pcb_array); // Free pcb_array
-    //     return NULL;     // Return NULL because the end of the file wasn't reached meaning the pcb_count was lower than the actual number of pcbs in the file
-    // }
     fclose(fp);                                                                                           // Close the file
     dyn_array_t *dyn_array = dyn_array_import(pcb_array, pcb_count, sizeof(ProcessControlBlock_t), NULL); // Create a dyn_array out of the pcb_array
     free(pcb_array);                                                                                      // Free the pcb_array
