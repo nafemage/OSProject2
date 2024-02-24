@@ -323,6 +323,24 @@ TEST(shortest_job_first, EqualBurstTime)
     dyn_array_destroy(ready_queue);
 }
 
+TEST(shortest_job_first, GoodTest)
+{
+    uint32_t arrivals[] = {0, 2, 4, 1, 1, 1};
+    uint32_t priorities[] = {0, 0, 0, 0, 0, 0};
+    uint32_t remaining_burst_times[] = {100, 96, 93, 99, 98, 98};
+    bool started[] = {false, false, false, false, false, false};
+    int count = 6;
+    dyn_array_t *array = create_dyn_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
+    ScheduleResult_t *sr = (ScheduleResult_t *)malloc(sizeof(ScheduleResult_t));
+    EXPECT_EQ(true, shortest_job_first(array, sr));
+    EXPECT_EQ((uint32_t)0, array->size);
+    EXPECT_NEAR((float)240.833, sr->average_waiting_time, .01);
+    EXPECT_NEAR((float)338.167, sr->average_turnaround_time, .01);
+    EXPECT_EQ((unsigned long)584, sr->total_run_time);
+    dyn_array_destroy(array);
+    free(sr);
+}
+
 // Unit tests for Round Robin
 TEST(round_robin, ErrorChecking)
 {

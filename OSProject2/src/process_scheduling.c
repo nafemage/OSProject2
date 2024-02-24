@@ -70,7 +70,7 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
         return false;
 
     // Sort the ready queue based on remaining burst time (shortest job first)
-    dyn_array_sort(ready_queue, compare_burst);
+    dyn_array_sort(ready_queue, compare_arrival_burst);
 
     // Initialize variables for tracking statistics
     float total_waiting_time = 0.0;
@@ -82,55 +82,58 @@ bool shortest_job_first(dyn_array_t *ready_queue, ScheduleResult_t *result)
     while (dyn_array_size(ready_queue) > 0)
     {
         // Find the shortest arrival time among all PCBs
-        uint32_t shortest_arrival_time = UINT32_MAX;
-
-        for (size_t i = 0; i < dyn_array_size(ready_queue); ++i)
-        {
-            const ProcessControlBlock_t *pcb = (const ProcessControlBlock_t *)dyn_array_at(ready_queue, i);
-
-            if (pcb->arrival < shortest_arrival_time)
-            {
-                shortest_arrival_time = pcb->arrival;
-            }
-        }
+        const ProcessControlBlock_t *first_pcb = (const ProcessControlBlock_t *)dyn_array_at(ready_queue, 0);
+        uint32_t shortest_burst_time = first_pcb->remaining_burst_time;
+        uint32_t shortest_arrival_time = first_pcb->arrival;
 
         // Move total_run_time forward by the shortest arrival time
         total_run_time = (shortest_arrival_time > total_run_time) ? shortest_arrival_time : total_run_time;
 
+        size_t pcb_index = 0;
+        for (size_t i = 0; i < dyn_array_size(ready_queue); ++i)
+        {
+            const ProcessControlBlock_t *pcb = (const ProcessControlBlock_t *)dyn_array_at(ready_queue, i);
+
+            if (pcb->arrival <= total_run_time)
+            {
+                if(pcb->remaining_burst_time < shortest_burst_time){
+                    shortest_burst_time = pcb->remaining_burst_time;
+                    pcb_index = i;
+                }
+            } else {
+                break;
+            }
+        }
+
         // Get the PCB with the shortest remaining burst time
-        ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_at(ready_queue, 0);
+        ProcessControlBlock_t *pcb = (ProcessControlBlock_t *)dyn_array_at(ready_queue, pcb_index);
+        // Mark PCB as started
+        pcb->started = true;
 
-        // Check if the PCB meets the correct standards
-        if (pcb->arrival <= total_run_time && !pcb->started && !pcb->completed)
-        {
-            // Mark PCB as started
-            pcb->started = true;
+        // Update statistics
+        total_run_time += pcb->remaining_burst_time;
+        float turnaround_time = total_run_time - pcb->arrival;
+        total_turnaround_time += turnaround_time;
+        total_waiting_time += turnaround_time - pcb->remaining_burst_time;
+        
+        // total_waiting_time += total_run_time - pcb->arrival;
+        // total_turnaround_time += total_run_time - pcb->arrival + pcb->remaining_burst_time;
+        // total_run_time += pcb->remaining_burst_time;
 
-            // Update statistics
-            total_run_time += pcb->remaining_burst_time;
-            float turnaround_time = total_run_time - pcb->arrival;
-            total_turnaround_time += turnaround_time;
-            total_waiting_time += turnaround_time - pcb->remaining_burst_time;
-            
-            // total_waiting_time += total_run_time - pcb->arrival;
-            // total_turnaround_time += total_run_time - pcb->arrival + pcb->remaining_burst_time;
-            // total_run_time += pcb->remaining_burst_time;
+        // Execute the process
+        virtual_cpu(pcb, pcb->remaining_burst_time);
 
-            // Execute the process
-            virtual_cpu(pcb, pcb->remaining_burst_time);
+        // Mark PCB as completed
+        pcb->completed = true;
 
-            // Mark PCB as completed
-            pcb->completed = true;
-
-            // Remove the processed PCB from the ready_queue
-            dyn_array_erase(ready_queue, 0);
-        }
-        else
-        {
-            // If the PCB doesn't meet the standards, move it to the end of the queue
-            dyn_array_push_back(ready_queue, pcb);
-            dyn_array_erase(ready_queue, 0);
-        }
+        // Remove the processed PCB from the ready_queue
+        dyn_array_erase(ready_queue, pcb_index);
+        // else
+        // {
+        //     // If the PCB doesn't meet the standards, move it to the end of the queue
+        //     dyn_array_push_back(ready_queue, pcb);
+        //     dyn_array_erase(ready_queue, 0);
+        // }
     }
 
     // Update the result structure with calculated averages
