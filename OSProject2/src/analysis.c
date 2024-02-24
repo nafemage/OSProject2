@@ -11,6 +11,8 @@
 // #define RR "RR"
 // #define SJF "SJF"
 
+#define RESULT_LINE 15
+
 // Add and comment your analysis code in this function.
 // THIS IS NOT FINISHED.
 int main(int argc, char **argv)
@@ -71,6 +73,7 @@ int main(int argc, char **argv)
     if (algorithm_result)
     {
         print_schedule_result(sr, NULL);
+        print_to_readme(sr, RESULT_LINE);
     }
     else
     {

@@ -50,6 +50,8 @@ extern "C"
     // Sorts a and b by arrival time. If arrival time is equal then by burst time
     int compare_arrival(const void *a, const void *b);
 
+    int compare_arrival_burst(const void *a, const void *b);
+
     void write_schedule_result(ScheduleResult_t *sr, uint32_t total_turnaround_time, uint32_t total_wait_time, uint32_t total_run_time, uint32_t process_count);
 
     FILE *get_readme();

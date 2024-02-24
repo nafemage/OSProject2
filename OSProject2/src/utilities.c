@@ -143,7 +143,7 @@ int compare_burst(const void *a, const void *b)
     return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time;      // The pcb with the shortest burst time should be processed before the other
 }
 
-int compare_arrival(const void *a, const void *b)
+int compare_arrival_burst(const void *a, const void *b)
 {
     const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a; // Cast the "a" variable to a pcb
     const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b; // Cast the "b" variable to a pcb
@@ -156,6 +156,13 @@ int compare_arrival(const void *a, const void *b)
         return 1; // pcb_b should be processed before pcb_a
     }
     return pcb_a->remaining_burst_time - pcb_b->remaining_burst_time; // The pcb with the shortest burst time should be processed before the other
+}
+
+int compare_arrival(const void *a, const void *b)
+{
+    const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a; // Cast the "a" variable to a pcb
+    const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b; // Cast the "b" variable to a pcb
+    return pcb_a->arrival - pcb_b->arrival;
 }
 
 void write_schedule_result(ScheduleResult_t *sr, uint32_t total_turnaround_time, uint32_t total_wait_time, uint32_t total_run_time, uint32_t process_count)
