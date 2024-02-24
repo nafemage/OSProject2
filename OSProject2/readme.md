@@ -11,10 +11,6 @@ You can manually copy the time analysis from console and paste it to this readme
 ---------------------------------------------------------------------------
 Add your scheduling algorithm analysis below this line in a readable format. 
 ---------------------------------------------------------------------------
-Average Waiting Time: 2.000000
-Average Turnaround Time: 20.000000
-Total Run time: 30
-584
-rage Waiting Time: 2.000000
-Average Turnaround Time: 20.000000
-Total Run time: 30
+Average Waiting Time: 16.000000
+Average Turnaround Time: 28.500000
+Total Run time: 50
