@@ -36,7 +36,7 @@ processing_scheduling.h
 dyn_array.h
 ../include/dyn_array.h
 
-/homes/hpfannen/hw2-repo-test/OSProject2/src/process_scheduling.c
+/homes/hpfannen/hw2/OSProject2/src/process_scheduling.c
 fcntl.h
 -
 stdio.h
@@ -46,9 +46,9 @@ string.h
 unistd.h
 -
 dyn_array.h
-/homes/hpfannen/hw2-repo-test/OSProject2/src/dyn_array.h
+/homes/hpfannen/hw2/OSProject2/src/dyn_array.h
 processing_scheduling.h
-/homes/hpfannen/hw2-repo-test/OSProject2/src/processing_scheduling.h
+/homes/hpfannen/hw2/OSProject2/src/processing_scheduling.h
 utilities.h
-/homes/hpfannen/hw2-repo-test/OSProject2/src/utilities.h
+/homes/hpfannen/hw2/OSProject2/src/utilities.h
 

@@ -19,45 +19,66 @@ void print_pcb_array(ProcessControlBlock_t *pcb_array, size_t count)
 
 ProcessControlBlock_t *create_pcb(uint32_t arrival, uint32_t priority, uint32_t remaining_burst_time, bool started, ProcessControlBlock_t *ptr)
 {
+    // If ptr is NULL, allocate memory for a new pcb
     if (ptr == NULL)
     {
         ptr = (ProcessControlBlock_t *)malloc(sizeof(ProcessControlBlock_t));
     }
 
+    // Update attributes of the pcb
     ptr->arrival = arrival;
     ptr->priority = priority;
     ptr->remaining_burst_time = remaining_burst_time;
     ptr->started = started;
     ptr->total_burst_time = remaining_burst_time;
     ptr->completed = false;
+
     return ptr;
 }
 
 ProcessControlBlock_t *create_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint32_t *remaining_burst_times, bool *started, int count)
 {
+    // Check if any of the input arrays is NULL, if so, return NULL
     if (arrivals == NULL || priorities == NULL || remaining_burst_times == NULL || started == NULL)
     {
         return NULL;
     }
+    // Allocate memory for the array of pcbs
     ProcessControlBlock_t *pcb_array = (ProcessControlBlock_t *)malloc(sizeof(ProcessControlBlock_t) * count);
+
+    // Initialize each pcb in the array with the corresponding attributes
     for (int i = 0; i < count; i++)
     {
         create_pcb(arrivals[i], priorities[i], remaining_burst_times[i], started[i], &(pcb_array[i]));
     }
+
     return pcb_array;
 }
 
 dyn_array_t *create_dyn_pcb_array(uint32_t *arrivals, uint32_t *priorities, uint32_t *remaining_burst_times, bool *started, int count)
 {
+    // Create an array of pcbs using create_pcb_array function
     ProcessControlBlock_t *pcb_array = create_pcb_array(arrivals, priorities, remaining_burst_times, started, count);
+
+    // Check if pcb_array is NULL, if so, return NULL.
+    if(pcb_array == NULL)
+    {
+        return NULL;
+    }
+
+    // Import the array of pcbs into a dynamic array.
     dyn_array_t *dyn_array = dyn_array_import(pcb_array, count, sizeof(ProcessControlBlock_t), NULL);
+
+    // Free the memory allocated for the array of pcbs
     free(pcb_array);
+
     return dyn_array;
 }
 
 // Prints to stdout if file is NULL
 void print_schedule_result(ScheduleResult_t *result, FILE *file)
 {
+    // Print the schedule result to a FILE variable
     FILE *output = file == NULL ? stdout : file;
     fprintf(output, "Average Waiting Time: %f\n", result->average_waiting_time);
     fprintf(output, "Average Turnaround Time: %f\n", result->average_turnaround_time);
@@ -73,6 +94,7 @@ void print_schedule_result(ScheduleResult_t *result, FILE *file)
 #define SJF "SJF"
 #define SRTF "SRTF"
 
+// Wrapper for strncmp
 bool str_is_equal(char *str1, char *str2, int char_ct)
 {
     return strncmp(str1, str2, char_ct) == 0;
@@ -80,27 +102,27 @@ bool str_is_equal(char *str1, char *str2, int char_ct)
 
 bool is_fcfs(char *str)
 {
-    return str_is_equal(str, FCFS, 5) || str_is_equal(str, "first_come_first_serve", 23);
+    return str_is_equal(str, FCFS, 5) || str_is_equal(str, "first_come_first_serve", 23); //Check str equality
 }
 
 bool is_sjf(char *str)
 {
-    return str_is_equal(str, SJF, 4) || str_is_equal(str, "shortest_job_first", 19);
+    return str_is_equal(str, SJF, 4) || str_is_equal(str, "shortest_job_first", 19); //Check str equality
 }
 
 bool is_priority(char *str)
 {
-    return str_is_equal(str, P, 2) || str_is_equal(str, "priority", 10);
+    return str_is_equal(str, P, 2) || str_is_equal(str, "priority", 10); //Check str equality
 }
 
 bool is_rr(char *str)
 {
-    return str_is_equal(str, RR, 3) || str_is_equal(str, "round_robin", 12);
+    return str_is_equal(str, RR, 3) || str_is_equal(str, "round_robin", 12); //Check str equality
 }
 
 bool is_srtf(char *str)
 {
-    return str_is_equal(str, SRTF, 5) || str_is_equal(str, "shortest_remaining_time_first", 30);
+    return str_is_equal(str, SRTF, 5) || str_is_equal(str, "shortest_remaining_time_first", 30); //Check str equality
 }
 
 void print_valid_algorithms()
@@ -129,7 +151,7 @@ void enqueue_processes(dyn_array_t *ready_queue, dyn_array_t *current_processes,
     while (ready_queue->size > 0 && pcb->arrival == *current_wait_time) // While pcbs are in the ready_queue and the pcb at the front of the queue has the same arrival time as the wait time
     {
         pcb = (ProcessControlBlock_t *)dyn_array_front(ready_queue); // Get the pcb at the front of the ready_queue
-        // Note: storing dyn_array_front and following it by dyn_array_pop_front will change the value referenced by the dyn_array_front variable (this is why a create a new pcb with the same values)
+        // Note: storing dyn_array_front and following it by dyn_array_pop_front will change the value referenced by the dyn_array_front variable (this is why a new pcb with the same values is created)
         const ProcessControlBlock_t *pcb_cpy = create_pcb(pcb->arrival, pcb->priority, pcb->remaining_burst_time, pcb->started, NULL); // Copy the pcb at the front of the ready_queue
         dyn_array_pop_front(ready_queue);                                                                                              // Remove the pcb from the ready_queue
         dyn_array_insert_sorted(current_processes, pcb_cpy, cmp_fn);                                                                   // Insert the pcb into the current_processes queue (this will insert based on burst time)
@@ -162,14 +184,14 @@ int compare_arrival(const void *a, const void *b)
 {
     const ProcessControlBlock_t *pcb_a = (const ProcessControlBlock_t *)a; // Cast the "a" variable to a pcb
     const ProcessControlBlock_t *pcb_b = (const ProcessControlBlock_t *)b; // Cast the "b" variable to a pcb
-    return pcb_a->arrival - pcb_b->arrival;
+    return pcb_a->arrival - pcb_b->arrival; // The pcb with the shorter arrival will be first
 }
 
 void write_schedule_result(ScheduleResult_t *sr, uint32_t total_turnaround_time, uint32_t total_wait_time, uint32_t total_run_time, uint32_t process_count)
 {
     sr->average_turnaround_time = (float)total_turnaround_time / process_count; // Calculate and store the average turnaround time
     sr->average_waiting_time = (float)total_wait_time / process_count;          // Calculate and store the average wait time
-    sr->total_run_time = total_run_time;
+    sr->total_run_time = total_run_time;                                        // Store the total run time
 }
 
 #define READMELOC "../readme.md"
@@ -190,19 +212,34 @@ void seek_file(FILE *file, int line_number)
 {
     // Seek to the beginning of line 'line_number'
     fseek(file, 0, SEEK_SET);
+    // Iterate 'line_number' times
     for (int i = 0; i < line_number; ++i)
-        while (fgetc(file) != '\n')
-            ;
+    {
+        // While the current file position is not at the end of a line or the end of the file, seek until it is at the end of a line or end of the file
+        int result = fgetc(file);
+        while (result != EOF && result != '\n')
+        {
+            result = fgetc(file);
+        }
+        // If the end of the file has been reached there are no more lines to be scanned (line_number was too big) and the loop does not need to continue to iterate
+        if(result == EOF)
+        {
+            break;
+        }
+    }
 }
 
 bool print_to_readme(ScheduleResult_t *result, int line_number)
 {
+    //Open the readme file
     FILE *readme_file = get_readme();
     if (readme_file == NULL)
     {
         return false;
     }
+    //Seek to the desired line number
     seek_file(readme_file, line_number - 1);
+    //Print the result to the readme
     print_schedule_result(result, readme_file);
     // Close the file
     fclose(readme_file);

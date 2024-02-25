@@ -43,10 +43,10 @@ RM = /opt/software/software/CMake/3.16.4-GCCcore-9.3.0/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /homes/hpfannen/hw2-repo-test/OSProject2
+CMAKE_SOURCE_DIR = /homes/hpfannen/hw2/OSProject2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /homes/hpfannen/hw2-repo-test/OSProject2/build
+CMAKE_BINARY_DIR = /homes/hpfannen/hw2/OSProject2/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/process_scheduling.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/process_scheduling.dir/flags.make
 
 CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o: CMakeFiles/process_scheduling.dir/flags.make
 CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o: ../src/process_scheduling.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o   -c /homes/hpfannen/hw2-repo-test/OSProject2/src/process_scheduling.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/homes/hpfannen/hw2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o"
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o   -c /homes/hpfannen/hw2/OSProject2/src/process_scheduling.c
 
 CMakeFiles/process_scheduling.dir/src/process_scheduling.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/process_scheduling.dir/src/process_scheduling.c.i"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /homes/hpfannen/hw2-repo-test/OSProject2/src/process_scheduling.c > CMakeFiles/process_scheduling.dir/src/process_scheduling.c.i
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /homes/hpfannen/hw2/OSProject2/src/process_scheduling.c > CMakeFiles/process_scheduling.dir/src/process_scheduling.c.i
 
 CMakeFiles/process_scheduling.dir/src/process_scheduling.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/process_scheduling.dir/src/process_scheduling.c.s"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /homes/hpfannen/hw2-repo-test/OSProject2/src/process_scheduling.c -o CMakeFiles/process_scheduling.dir/src/process_scheduling.c.s
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /homes/hpfannen/hw2/OSProject2/src/process_scheduling.c -o CMakeFiles/process_scheduling.dir/src/process_scheduling.c.s
 
 # Object files for target process_scheduling
 process_scheduling_OBJECTS = \
@@ -80,7 +80,7 @@ process_scheduling_EXTERNAL_OBJECTS =
 libprocess_scheduling.a: CMakeFiles/process_scheduling.dir/src/process_scheduling.c.o
 libprocess_scheduling.a: CMakeFiles/process_scheduling.dir/build.make
 libprocess_scheduling.a: CMakeFiles/process_scheduling.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libprocess_scheduling.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/hpfannen/hw2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libprocess_scheduling.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/process_scheduling.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/process_scheduling.dir/link.txt --verbose=$(VERBOSE)
 
@@ -94,6 +94,6 @@ CMakeFiles/process_scheduling.dir/clean:
 .PHONY : CMakeFiles/process_scheduling.dir/clean
 
 CMakeFiles/process_scheduling.dir/depend:
-	cd /homes/hpfannen/hw2-repo-test/OSProject2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /homes/hpfannen/hw2-repo-test/OSProject2 /homes/hpfannen/hw2-repo-test/OSProject2 /homes/hpfannen/hw2-repo-test/OSProject2/build /homes/hpfannen/hw2-repo-test/OSProject2/build /homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles/process_scheduling.dir/DependInfo.cmake --color=$(COLOR)
+	cd /homes/hpfannen/hw2/OSProject2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /homes/hpfannen/hw2/OSProject2 /homes/hpfannen/hw2/OSProject2 /homes/hpfannen/hw2/OSProject2/build /homes/hpfannen/hw2/OSProject2/build /homes/hpfannen/hw2/OSProject2/build/CMakeFiles/process_scheduling.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/process_scheduling.dir/depend
 

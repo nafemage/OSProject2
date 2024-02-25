@@ -43,10 +43,10 @@ RM = /opt/software/software/CMake/3.16.4-GCCcore-9.3.0/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /homes/hpfannen/hw2-repo-test/OSProject2
+CMAKE_SOURCE_DIR = /homes/hpfannen/hw2/OSProject2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /homes/hpfannen/hw2-repo-test/OSProject2/build
+CMAKE_BINARY_DIR = /homes/hpfannen/hw2/OSProject2/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/write_pcb_file.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/write_pcb_file.dir/flags.make
 
 CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o: CMakeFiles/write_pcb_file.dir/flags.make
 CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o: ../pcb_file_tests/write_pcb_file.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o   -c /homes/hpfannen/hw2-repo-test/OSProject2/pcb_file_tests/write_pcb_file.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/homes/hpfannen/hw2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o"
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o   -c /homes/hpfannen/hw2/OSProject2/pcb_file_tests/write_pcb_file.c
 
 CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.i"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /homes/hpfannen/hw2-repo-test/OSProject2/pcb_file_tests/write_pcb_file.c > CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.i
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /homes/hpfannen/hw2/OSProject2/pcb_file_tests/write_pcb_file.c > CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.i
 
 CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.s"
-	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /homes/hpfannen/hw2-repo-test/OSProject2/pcb_file_tests/write_pcb_file.c -o CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.s
+	/opt/software/software/GCCcore/9.3.0/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /homes/hpfannen/hw2/OSProject2/pcb_file_tests/write_pcb_file.c -o CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.s
 
 # Object files for target write_pcb_file
 write_pcb_file_OBJECTS = \
@@ -80,7 +80,7 @@ write_pcb_file_EXTERNAL_OBJECTS =
 libwrite_pcb_file.a: CMakeFiles/write_pcb_file.dir/pcb_file_tests/write_pcb_file.c.o
 libwrite_pcb_file.a: CMakeFiles/write_pcb_file.dir/build.make
 libwrite_pcb_file.a: CMakeFiles/write_pcb_file.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libwrite_pcb_file.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/homes/hpfannen/hw2/OSProject2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libwrite_pcb_file.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/write_pcb_file.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/write_pcb_file.dir/link.txt --verbose=$(VERBOSE)
 
@@ -94,6 +94,6 @@ CMakeFiles/write_pcb_file.dir/clean:
 .PHONY : CMakeFiles/write_pcb_file.dir/clean
 
 CMakeFiles/write_pcb_file.dir/depend:
-	cd /homes/hpfannen/hw2-repo-test/OSProject2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /homes/hpfannen/hw2-repo-test/OSProject2 /homes/hpfannen/hw2-repo-test/OSProject2 /homes/hpfannen/hw2-repo-test/OSProject2/build /homes/hpfannen/hw2-repo-test/OSProject2/build /homes/hpfannen/hw2-repo-test/OSProject2/build/CMakeFiles/write_pcb_file.dir/DependInfo.cmake --color=$(COLOR)
+	cd /homes/hpfannen/hw2/OSProject2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /homes/hpfannen/hw2/OSProject2 /homes/hpfannen/hw2/OSProject2 /homes/hpfannen/hw2/OSProject2/build /homes/hpfannen/hw2/OSProject2/build /homes/hpfannen/hw2/OSProject2/build/CMakeFiles/write_pcb_file.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/write_pcb_file.dir/depend
 

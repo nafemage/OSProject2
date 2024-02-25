@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11 -Wall -Wextra -Wshadow -Werror
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/homes/hpfannen/hw2-repo-test/OSProject2/./include 
+CXX_INCLUDES = -I/homes/hpfannen/hw2/OSProject2/./include 
 

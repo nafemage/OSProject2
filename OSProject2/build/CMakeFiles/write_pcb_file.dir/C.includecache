@@ -18,11 +18,11 @@ string.h
 stdint.h
 -
 
-/homes/hpfannen/hw2-repo-test/OSProject2/pcb_file_tests/write_pcb_file.c
+/homes/hpfannen/hw2/OSProject2/pcb_file_tests/write_pcb_file.c
 stdio.h
 -
 stdlib.h
 -
 dyn_array.h
-/homes/hpfannen/hw2-repo-test/OSProject2/pcb_file_tests/dyn_array.h
+/homes/hpfannen/hw2/OSProject2/pcb_file_tests/dyn_array.h
 
