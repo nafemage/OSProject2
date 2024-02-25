@@ -115,26 +115,6 @@ TEST(shortest_remaining_time_first, NullScheduleResult)
     dyn_array_destroy(array);
 }
 
-// PCB #1:
-//  Remaining Burst Time: 15
-//  Arrival Time: 0
-//  Priority: 0
-
-// PCB #2:
-// Remaining Burst Time: 10
-// Arrival Time: 1
-// Priority: 0
-
-// PCB #3:
-// Remaining Burst Time: 5
-// Arrival Time: 2
-// Priority: 0
-
-// PCB #4:
-// Remaining Burst Time: 20
-// Arrival Time: 3
-// Priority: 0
-
 TEST(shortest_remaining_time_first, SuccessfulRunFile)
 {
     dyn_array_t *array = load_process_control_blocks("../pcb.bin");

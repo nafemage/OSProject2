@@ -300,11 +300,13 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
     elements_read = fread(&pcb_count, sizeof(uint32_t), 1, fp); // Read the first line and store the contents in pcb_content
     if (elements_read != 1)
     {
+        fclose(fp); 
         return NULL; // Return NULL if less than 1 or more than 1 elements were read
     }
     ProcessControlBlock_t *pcb_array = malloc(sizeof(ProcessControlBlock_t) * pcb_count); // Allocate space for an array that can hold 'pcb_count' pcbs
     if (!pcb_array)
     {
+        fclose(fp); 
         return NULL; // Return NULL if memory couldn't be allocated
     }
     for (uint32_t i = 0; i < pcb_count; i++) // Iterate through pcb_count
@@ -316,18 +318,21 @@ dyn_array_t *load_process_control_blocks(const char *input_file)
         elements_read = fread(&remaining_burst_time, sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the burst time) and update the pcb's burst time
         if (elements_read != 1)
         {
+            fclose(fp); 
             free(pcb_array); // Free the pcb_array since an invalid number of elements were read (most likely 0 or an error) meaning the file is invalid
             return NULL;     // Return NULL if less than 1 or more than 1 elements were read
         }
         elements_read = fread(&priority, sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the priority) and update the pcb's priority
         if (elements_read != 1)
         {
+            fclose(fp); 
             free(pcb_array); // Free the pcb_array since an invalid number of elements were read (most likely 0 or an error) meaning the file is invalid
             return NULL;     // Return NULL if less than 1 or more than 1 elements were read
         }
         elements_read = fread(&arrival, sizeof(uint32_t), 1, fp); // Read the next line in the file (which corresponds to the arrival) and update the pcb's arrival
         if (elements_read != 1)
         {
+            fclose(fp); 
             free(pcb_array); // Free the pcb_array since an invalid number of elements were read (most likely 0 or an error) meaning the file is invalid
             return NULL;     // Return NULL if less than 1 or more than 1 elements were read
         }
